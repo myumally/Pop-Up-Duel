@@ -30,7 +30,7 @@ build/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 build/%.o: tests/%.cpp
-	@mkdir -p build_tests
+	@mkdir -p build
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 clean:
