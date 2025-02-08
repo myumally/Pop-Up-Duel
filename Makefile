@@ -1,0 +1,42 @@
+CXX=g++
+CXXFLAGS=-Wall -Wextra -MMD -I ./include -g
+LDFLAGS=
+
+EXE=pop
+TEST_EXE=test
+
+# Fichiers sources du programme principal
+SRC=$(wildcard src/*.cpp)
+OBJ=$(addprefix build/,$(SRC:src/%.cpp=%.o))
+DEP=$(addprefix build/,$(SRC:src/%.cpp=%.d))
+
+# Fichiers sources de tests
+TEST_SRC=$(wildcard tests/*.cpp)
+TEST_OBJ=$(addprefix build/,$(TEST_SRC:tests/%.cpp=%.o))
+TEST_DEP=$(addprefix build/,$(TEST_SRC:tests/%.cpp=%.d))
+
+all: $(EXE) $(TEST_EXE)
+
+$(EXE): $(OBJ)
+	$(CXX) -o $(EXE) $^ $(LDFLAGS)
+
+# Compilation des tests
+$(TEST_EXE): $(TEST_OBJ)
+	$(CXX) -o $(TEST_EXE) $^ $(LDFLAGS)
+
+
+build/%.o: src/%.cpp
+	@mkdir -p build
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+build/%.o: tests/%.cpp
+	@mkdir -p build_tests
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+clean:
+	rm -rf build build_tests core *.gch $(EXE) $(TEST_EXE)
+
+-include $(DEP)
+-include $(TEST_DEP)
+
+
