@@ -1,0 +1,136 @@
+#include "../include/Card.hpp"
+
+Card::Card(int n, std::string monster, std::string attack, Colour c, Colour SwordZone, std::list<Colour> GuardZones, Effect e, int s){
+
+  // Card
+
+  id = n;
+  MonsterName = monster;
+  AttackName = attack;
+  colour = c;
+
+  // Zones 
+
+  SwordAttack = true;
+
+  switch (SwordZone) {
+    case 1:
+      RedZone = Sword; 
+      break;
+    case 2:
+      GreenZone = Sword; 
+      break;
+    case 3:
+      BlueZone = Sword; 
+      break;
+    case 4:
+      YellowZone = Sword; 
+      break;
+    default:
+      SwordAttack = false;
+        break;
+  }
+
+  for(Colour col : GuardZones){
+    switch (col) {
+      case 1:
+        RedZone = Shield; 
+        break;
+      case 2:
+        GreenZone = Shield; 
+        break;
+      case 3:
+        BlueZone = Shield; 
+        break;
+      case 4:
+        YellowZone = Shield; 
+        break;
+      default:
+        break;
+    }
+  }
+
+  // Attack and Effects
+
+  effect = e;
+  strength = s;
+}
+
+// Getter and Setter
+
+int Card::getId() const {
+  return id;
+}
+void Card::setId(int newId) {
+  id = newId;
+}
+
+std::string Card::getMonsterName() const {
+  return MonsterName;
+}
+void Card::setMonsterName(const std::string& newName) {
+  MonsterName = newName;
+}
+
+std::string Card::getAttackName() const {
+  return AttackName;
+}
+void Card::setAttackName(const std::string& newAttackName) {
+  AttackName = newAttackName;
+}
+
+Colour Card::getColour() const {
+  return colour;
+}
+void Card::setColour(Colour newColour) {
+  colour = newColour;
+}
+
+ZoneType Card::getRedZone() const {
+  return RedZone;
+}
+void Card::setRedZone(ZoneType newRedZone) {
+  RedZone = newRedZone;
+}
+
+ZoneType Card::getGreenZone() const {
+  return GreenZone;
+}
+void Card::setGreenZone(ZoneType newGreenZone) {
+  GreenZone = newGreenZone;
+}
+
+ZoneType Card::getBlueZone() const {
+  return BlueZone;
+}
+void Card::setBlueZone(ZoneType newBlueZone) {
+  BlueZone = newBlueZone;
+}
+
+ZoneType Card::getYellowZone() const {
+  return YellowZone;
+}
+void Card::setYellowZone(ZoneType newYellowZone) {
+  YellowZone = newYellowZone;
+}
+
+bool Card::hasSwordAttack() const {
+  return SwordAttack;
+}
+void Card::setSwordAttack(bool b) {
+  SwordAttack = b;
+}
+
+Effect Card::getEffect() const {
+  return effect;
+}
+void Card::setEffect(Effect newEffect) {
+  effect = newEffect;
+}
+
+int Card::getStrength() const {
+  return strength;
+}
+void Card::setStrength(int newStrength) {
+  strength = newStrength;
+}
