@@ -56,6 +56,34 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour Swor
   strength = s;
 }
 
+Card::Card(Card& c){
+
+  // Card
+
+  id = c.getId();
+  MonsterName = c.getMonsterName();
+  AttackName = c.getMonsterName();
+  colour = c.getColour();
+
+  // Zones 
+
+  SwordAttack = c.hasSwordAttack();
+  RedZone = c.getRedZone(); 
+  GreenZone = c.getGreenZone();
+  BlueZone = c.getBlueZone();
+  YellowZone = c.getYellowZone(); 
+
+  // Attack and Effects
+
+  effect = c.getEffect();
+  strength = c.getEffect();
+}
+
+Card::~Card(){
+
+}
+
+
 // Getter and Setter
 
 int Card::getId() const {
@@ -133,4 +161,8 @@ int Card::getStrength() const {
 }
 void Card::setStrength(int newStrength) {
   strength = newStrength;
+}
+
+void Card::toStream(std::ostream& os) const{
+    os<<"Monster Name: " << MonsterName <<" Attack Name: " << AttackName <<" id: " << id <<" Colour: " << colour;
 }

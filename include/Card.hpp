@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <iostream>
 
 enum ZoneType {Blank, Sword, Shield};
 
@@ -44,6 +45,8 @@ class Card{
   public :
 
   Card(int n, std::string monster, std::string attack, Colour c, Colour SwordZone, std::list<Colour> GuardZones, Effect e, int s);
+  Card(Card& c);
+  ~Card();
 
   // Getters and Setters
 
@@ -79,6 +82,8 @@ class Card{
 
   int getStrength() const;
   void setStrength(int newStrength);
+
+  void toStream(std::ostream& os = std::cout) const;
 
 };
 
