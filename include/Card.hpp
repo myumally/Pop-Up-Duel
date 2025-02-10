@@ -60,25 +60,27 @@ class Card{
   void setAttackName(const std::string& newAttackName);
 
   Colour getColour() const;
-  void setColour(Colour newColour);
+  void setColour(const Colour& newColour);
 
   ZoneType getRedZone() const;
-  void setRedZone(ZoneType newRedZone);
+  void setRedZone(const ZoneType& newRedZone);
 
   ZoneType getGreenZone() const;
-  void setGreenZone(ZoneType newGreenZone);
+  void setGreenZone(const ZoneType& newGreenZone);
 
   ZoneType getBlueZone() const;
-  void setBlueZone(ZoneType newBlueZone);
+  void setBlueZone(const ZoneType& newBlueZone);
 
   ZoneType getYellowZone() const;
-  void setYellowZone(ZoneType newYellowZone);
+  void setYellowZone(const ZoneType& newYellowZone);
+
+  int getNumberOfZoneType(const ZoneType& type) const;
 
   bool hasSwordAttack() const;
   void setSwordAttack(bool newSword);
 
   Effect getEffect() const;
-  void setEffect(Effect newEffect);
+  void setEffect(const Effect& newEffect);
 
   int getStrength() const;
   void setStrength(int newStrength);

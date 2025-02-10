@@ -22,6 +22,9 @@ TEST_CASE("Constructeur Card 2") {
     CHECK(Red == c.getColour());
     CHECK(false == c.hasSwordAttack());
     CHECK(Nothing == c.getEffect());
+    CHECK(0 == c.getNumberOfZoneType(Sword));
+    CHECK(2 == c.getNumberOfZoneType(Shield));
+    CHECK(2 == c.getNumberOfZoneType(Blank));
 }
 
 TEST_CASE("Constructeur Player") {
@@ -87,7 +90,6 @@ TEST_CASE("Deck Management 2") {
 
 }
 
-
 TEST_CASE("Deck Management 3") {
     Player p1("player1");
 
@@ -102,7 +104,6 @@ TEST_CASE("Deck Management 3") {
         CHECK(i == (*it)->getId());
     }
 }
-
 
 TEST_CASE("Deck Management 4") {
     Player p1("player1");

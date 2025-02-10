@@ -110,36 +110,45 @@ void Card::setAttackName(const std::string& newAttackName) {
 Colour Card::getColour() const {
   return colour;
 }
-void Card::setColour(Colour newColour) {
+void Card::setColour(const Colour& newColour) {
   colour = newColour;
 }
 
 ZoneType Card::getRedZone() const {
   return RedZone;
 }
-void Card::setRedZone(ZoneType newRedZone) {
+void Card::setRedZone(const ZoneType& newRedZone) {
   RedZone = newRedZone;
 }
 
 ZoneType Card::getGreenZone() const {
   return GreenZone;
 }
-void Card::setGreenZone(ZoneType newGreenZone) {
+void Card::setGreenZone(const ZoneType& newGreenZone) {
   GreenZone = newGreenZone;
 }
 
 ZoneType Card::getBlueZone() const {
   return BlueZone;
 }
-void Card::setBlueZone(ZoneType newBlueZone) {
+void Card::setBlueZone(const ZoneType& newBlueZone) {
   BlueZone = newBlueZone;
 }
 
 ZoneType Card::getYellowZone() const {
   return YellowZone;
 }
-void Card::setYellowZone(ZoneType newYellowZone) {
+void Card::setYellowZone(const ZoneType& newYellowZone) {
   YellowZone = newYellowZone;
+}
+
+int Card::getNumberOfZoneType(const ZoneType& type) const{
+  int n = 0;
+  if(RedZone == type) ++n;
+  if(GreenZone == type) ++n;
+  if(BlueZone == type) ++n;
+  if(YellowZone == type) ++n;
+  return n;
 }
 
 bool Card::hasSwordAttack() const {
@@ -152,7 +161,7 @@ void Card::setSwordAttack(bool b) {
 Effect Card::getEffect() const {
   return effect;
 }
-void Card::setEffect(Effect newEffect) {
+void Card::setEffect(const Effect& newEffect) {
   effect = newEffect;
 }
 
