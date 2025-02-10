@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include "../include/all_includes.hpp"
 
 TEST_CASE("Constructeur Card 1") {
@@ -63,3 +61,58 @@ TEST_CASE("LP Management 2") {
 
     CHECK(20 == p1.getLP());
 }
+
+TEST_CASE("Deck Management 1") {
+    Player p1("player1");
+
+    CHECK(false == p1.isDeckComplete());
+
+    for(int i = 0; i < DECK_SIZE + 5; i++){
+      p1.addCard( new Card(i, "monster", "attack", Red, Grey, {Green, Yellow}, Nothing, 1));
+    }
+
+    CHECK(p1.isDeckComplete());
+}
+
+TEST_CASE("Deck Management 2") {
+    Player p1("player1");
+
+    for(int i = 0; i < DECK_SIZE + 5; i++){
+      p1.addCard( new Card(4, "monster", "attack", Red, Grey, {Green, Yellow}, Nothing, 1));
+    }
+
+    CHECK(false == p1.isDeckComplete());
+    CHECK(1 == p1.getDeck().size());
+
+}
+
+
+TEST_CASE("Deck Management 3") {
+    Player p1("player1");
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.addCard( new Card(i, "monster", "attack", Red, Grey, {Green, Yellow}, Nothing, 1));
+    }
+
+    std::list<Card*> deck = p1.getDeck();
+    
+    std::list<Card*>::iterator it = deck.begin();
+    for (int i = 0; i < 15; ++i, ++it) {
+        CHECK(i == (*it)->getId());
+    }
+}
+
+
+TEST_CASE("Deck Management 4") {
+    Player p1("player1");
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.addCard( new Card(i, "monster", "attack", Red, Grey, {Green, Yellow}, Nothing, 1));
+    }
+
+    p1.removeCard(5);
+
+    CHECK( 14 == p1.getDeck().size());
+ 
+}
+

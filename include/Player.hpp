@@ -23,6 +23,8 @@ class Player{
   public :
 
   Player(std::string name);
+  Player(Player& p);
+  ~Player();
 
   // Getters and Setters
 
@@ -31,7 +33,7 @@ class Player{
   std::string getName() const;
   void setName(const std::string& name);
 
-  std::list<Card*> getDeck();
+  std::list<Card*> getDeck() const;
 
   int getLP() const;
   void setLP(int lp);
@@ -40,6 +42,11 @@ class Player{
 
   void recoverLP(int n);
   void loseLP(int n); 
+
+  void addCard(Card* card);
+  void removeCard(Card* card);
+  void removeCard(int id);
+  bool isDeckComplete() const;
 
  };
 
