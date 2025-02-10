@@ -32,6 +32,7 @@ TEST_CASE("Constructeur Player") {
     CHECK( 1 == p2.getId());
     CHECK("player1" == p1.getName());
     CHECK(20 == p1.getLP());
+    CHECK(Nothing == p1.isAffectedBy());
 }
 
 TEST_CASE("LP Management 1") {

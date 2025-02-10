@@ -46,6 +46,14 @@ std::list<Colour> Player::getCP() const {
   return CP;
 }
 
+Effect Player::isAffectedBy() const{
+  return AffectedBy;
+}
+
+void Player::setAffectedBy(Effect effect){
+  AffectedBy = effect;
+}
+
 // LP Management
 
 void Player::recoverLP(int n){

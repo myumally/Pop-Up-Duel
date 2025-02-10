@@ -20,7 +20,9 @@ class Player{
   std::list<Card*> deck;
 
   int LP = MAX_LP;
-  std::list<Colour> CP;  
+  std::list<Colour> CP;
+
+  Effect AffectedBy = Nothing;
 
   public :
 
@@ -40,7 +42,10 @@ class Player{
   int getLP() const;
   void setLP(int lp);
 
-  std::list<Colour> getCP() const; 
+  std::list<Colour> getCP() const;
+
+  Effect isAffectedBy() const;
+  void setAffectedBy(Effect effect);
 
   void recoverLP(int n);
   void loseLP(int n); 
