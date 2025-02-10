@@ -3,6 +3,8 @@
 
 #include <string>
 #include <list>
+#include <array>
+#include <algorithm>
 #include "../include/Card.hpp"
 
 const int DECK_SIZE = 15;
@@ -18,12 +20,12 @@ class Player{
   std::list<Card*> deck;
 
   int LP = MAX_LP;
-  std::list<Colour*> CP;
+  std::list<Colour> CP;  
 
   public :
 
-  Player(std::string name);
-  Player(Player& p);
+  Player(const std::string& name);
+  Player(const Player& p);
   ~Player();
 
   // Getters and Setters
@@ -38,7 +40,7 @@ class Player{
   int getLP() const;
   void setLP(int lp);
 
-  std::list<Colour*> getCP() const; 
+  std::list<Colour> getCP() const; 
 
   void recoverLP(int n);
   void loseLP(int n); 
@@ -47,6 +49,15 @@ class Player{
   void removeCard(Card* card);
   void removeCard(int id);
   bool isDeckComplete() const;
+
+  void addCP(const Colour colour);
+  void removeCP(const Colour colour);
+  void removeAllCP();
+  void removeAllSpecificCP(const Colour c);
+  void setAllCP(const Colour colour);
+  int getNumberOfCP(const Colour& colour) const;
+  int getNumberOfCP(const std::list<Colour>& colours) const;
+  int getNumberOfMostAbundantCP() const;
 
  };
 

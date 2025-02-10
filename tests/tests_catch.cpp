@@ -116,3 +116,71 @@ TEST_CASE("Deck Management 4") {
  
 }
 
+TEST_CASE("CP Management 1") {
+    Player p1("player1");
+
+    for(int i = 0; i < MAX_CP + 5; i++){
+      p1.addCP(Red);
+    }
+
+    CHECK( MAX_CP == p1.getCP().size());
+}
+
+TEST_CASE("CP Management 2") {
+    Player p1("player1");
+
+    for(int i = 0; i < MAX_CP; i++){
+      p1.addCP(Grey);
+    }
+
+    p1.addCP(Red);
+
+    CHECK( 1 == p1.getCP().size());
+}
+
+TEST_CASE("CP Management 3") {
+    Player p1("player1");
+
+    for(int i = 0; i < 3; i++){
+      p1.addCP(Red);
+      p1.addCP(Blue);
+      p1.addCP(Green);
+    }
+
+    p1.removeAllSpecificCP(Blue);
+    CHECK( 6 == p1.getCP().size());
+
+    p1.removeCP(Blue);
+    CHECK( 6 == p1.getCP().size());
+
+    p1.removeCP(Red);
+    CHECK( 5 == p1.getCP().size());
+
+    p1.removeAllCP();
+    CHECK( 0 == p1.getCP().size());
+}
+
+TEST_CASE("CP Management 4") {
+    Player p1("player1");
+
+    for(int i = 0; i < 3; i++){
+      p1.addCP(Red);
+      p1.addCP(Blue);
+      p1.addCP(Green);
+    }
+
+    CHECK( 3 == p1.getNumberOfCP(Blue));
+
+    p1.removeCP(Blue);
+    CHECK( 2 ==  p1.getNumberOfCP(Blue));
+    CHECK( 5 ==  p1.getNumberOfCP({Blue, Green}));
+    CHECK( 3 == p1.getNumberOfMostAbundantCP());
+
+    p1.setAllCP(Blue);
+    CHECK( 8 ==  p1.getNumberOfCP(Blue));
+    CHECK( 8 == p1.getNumberOfMostAbundantCP());
+
+    p1.removeAllCP();
+    CHECK( 0 == p1.getNumberOfMostAbundantCP());
+}
+

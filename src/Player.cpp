@@ -2,13 +2,13 @@
 
 int Player::compteur = 0;
 
-Player::Player(std::string name){
+Player::Player(const std::string& name){
   id = compteur;
   compteur += 1;
   Name = name;
 }
 
-Player::Player(Player& p){
+Player::Player(const Player& p){
   id = compteur;
   compteur += 1;
   Name = p.Name;
@@ -42,7 +42,7 @@ void Player::setLP(int lp) {
   LP = lp;
 }
 
-std::list<Colour*> Player::getCP() const {
+std::list<Colour> Player::getCP() const {
   return CP;
 }
 
@@ -99,3 +99,72 @@ void Player::removeCard(int id) {
 bool Player::isDeckComplete() const {
   return(deck.size() == DECK_SIZE);
 }
+
+// CP Management
+
+void Player::addCP(const Colour colour){
+  if(colour != Grey){
+    if((CP.size() == MAX_CP)){
+      CP.pop_front();
+    }
+    CP.push_back(colour);
+  }
+}
+
+void Player::removeAllCP(){
+  CP.clear();
+}
+
+void Player::removeCP(const Colour colour){
+  if(!(CP.empty())){
+    std::list<Colour>::iterator it;
+    for(it = CP.begin(); it != CP.end(); it++){
+      if((*it) == colour){
+        CP.erase(it);
+        break;
+      }
+    }
+  }
+}
+
+void Player::removeAllSpecificCP(const Colour colour){
+  CP.remove(colour);
+}
+
+void Player::setAllCP(const Colour colour){
+  int number_of_cp = CP.size();
+  CP.clear();
+  for(int i = 0; i < number_of_cp; i++){
+    addCP(colour);
+  }
+}
+
+int Player::getNumberOfCP(const Colour& colour) const{
+  int n = 0; 
+  for (Colour c : CP) {
+    if (c == colour) {
+      ++n;
+    }
+  }
+  return n;
+}
+
+int Player::getNumberOfCP(const std::list<Colour>& colours) const {
+  int n = 0;
+  for (Colour c : CP) {
+    if (std::find(colours.begin(), colours.end(), c) != colours.end()) {
+      ++n;
+    }
+  }
+  return n;
+}
+
+int Player::getNumberOfMostAbundantCP() const{
+  std::array<int, 4> colours = {0};
+  for(int i = 1; i < 5; i++){
+    colours[i-1] = getNumberOfCP(static_cast<Colour>(i));
+  }
+
+  return *std::max_element(colours.begin(), colours.end());
+}
+
