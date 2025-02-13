@@ -29,7 +29,7 @@
     - [ ] Strength
     - [ ] Specials
 - [ ] User Interface
-  - [ ] Choosing what to use for graphics
+  - [x] Choosing what to use for graphics -> **SFML**
   - [ ] Deck Creation Menu
   - [ ] Home Menu
   - [ ] InGame Interface
