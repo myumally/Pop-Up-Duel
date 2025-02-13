@@ -5,9 +5,7 @@
 #include "All_Cards.hpp"
 
 #include "Card.hpp"
-#include "../src/Card.cpp"
 
 #include "Player.hpp"
-#include "../src/Player.cpp"
 
 #endif
