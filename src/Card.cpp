@@ -28,7 +28,7 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour Swor
       break;
     default:
       SwordAttack = false;
-        break;
+      break;
   }
 
   for(Colour col : GuardZones){
@@ -114,6 +114,28 @@ void Card::setColour(const Colour& newColour) {
   colour = newColour;
 }
 
+void Card::setSwordZone(const Colour& SwordZone){
+  SwordAttack = true;
+
+  switch (SwordZone) {
+    case 1:
+      RedZone = Sword; 
+      break;
+    case 2:
+      GreenZone = Sword; 
+      break;
+    case 3:
+      BlueZone = Sword; 
+      break;
+    case 4:
+      YellowZone = Sword; 
+      break;
+    default:
+      SwordAttack = false;
+      break;
+  }
+}
+
 ZoneType Card::getRedZone() const {
   return RedZone;
 }
@@ -173,5 +195,5 @@ void Card::setStrength(int newStrength) {
 }
 
 void Card::toStream(std::ostream& os) const{
-    os<<"Monster Name: " << MonsterName <<" Attack Name: " << AttackName <<" id: " << id <<" Colour: " << colour;
+  os<<"Monster Name: " << MonsterName <<" Attack Name: " << AttackName <<" id: " << id <<" Colour: " << colour;
 }

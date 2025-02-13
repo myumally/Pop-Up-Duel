@@ -19,6 +19,15 @@
 - [ ] Cards
   - [x] Images
   - [ ] All cards available
+    - [x] Ids
+    - [x] Monster Names
+    - [x] Attack Names
+    - [x] Card Colours
+    - [x] Sword Zones 
+    - [x] Guard Zones
+    - [ ] Effects
+    - [ ] Strength
+    - [ ] Specials
 - [ ] User Interface
   - [ ] Choosing what to use for graphics
   - [ ] Deck Creation Menu

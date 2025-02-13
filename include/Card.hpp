@@ -62,6 +62,8 @@ class Card{
   Colour getColour() const;
   void setColour(const Colour& newColour);
 
+  void setSwordZone(const Colour& SwordZone);
+
   ZoneType getRedZone() const;
   void setRedZone(const ZoneType& newRedZone);
 
