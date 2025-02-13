@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-Wall -Wextra -MMD -I ./include -g
-LDFLAGS=
+LDFLAGS=-L/lib/x86_64-linux-gnu -lsfml-graphics -lsfml-window -lsfml-system
 
 # Noms des executables
 EXE=pop
