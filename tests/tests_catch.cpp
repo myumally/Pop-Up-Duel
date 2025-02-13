@@ -2,7 +2,6 @@
 #include "../src/Card.cpp"
 #include "../src/Player.cpp"
 
-
 TEST_CASE("Constructeur Card 1") {
     Card c(1, "monster", "attack", Grey, Red, {Green, Blue}, Nothing, 1);
 
