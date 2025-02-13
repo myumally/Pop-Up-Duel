@@ -36,7 +36,7 @@ build/%.o: tests/%.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 clean:
-	rm -rf build build_tests core *.gch $(EXE) $(TEST_EXE)
+	rm -rf build core *.gch $(EXE) $(TEST_EXE)
 
 -include $(DEP)
 -include $(TEST_DEP)
