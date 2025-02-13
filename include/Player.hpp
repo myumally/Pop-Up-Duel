@@ -5,7 +5,7 @@
 #include <list>
 #include <array>
 #include <algorithm>
-#include "../include/Card.hpp"
+#include "Card.hpp"
 
 const int DECK_SIZE = 15;
 const int MAX_LP = 20;
@@ -55,11 +55,11 @@ class Player{
   void removeCard(int id);
   bool isDeckComplete() const;
 
-  void addCP(const Colour colour);
-  void removeCP(const Colour colour);
+  void addCP(const Colour& colour);
+  void removeCP(const Colour& colour);
   void removeAllCP();
-  void removeAllSpecificCP(const Colour c);
-  void setAllCP(const Colour colour);
+  void removeAllSpecificCP(const Colour& c);
+  void setAllCP(const Colour& colour);
   int getNumberOfCP(const Colour& colour) const;
   int getNumberOfCP(const std::list<Colour>& colours) const;
   int getNumberOfMostAbundantCP() const;

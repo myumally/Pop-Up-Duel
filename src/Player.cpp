@@ -110,7 +110,7 @@ bool Player::isDeckComplete() const {
 
 // CP Management
 
-void Player::addCP(const Colour colour){
+void Player::addCP(const Colour& colour){
   if(colour != Grey){
     if((CP.size() == MAX_CP)){
       CP.pop_front();
@@ -123,7 +123,7 @@ void Player::removeAllCP(){
   CP.clear();
 }
 
-void Player::removeCP(const Colour colour){
+void Player::removeCP(const Colour& colour){
   if(!(CP.empty())){
     std::list<Colour>::iterator it;
     for(it = CP.begin(); it != CP.end(); it++){
@@ -135,11 +135,11 @@ void Player::removeCP(const Colour colour){
   }
 }
 
-void Player::removeAllSpecificCP(const Colour colour){
+void Player::removeAllSpecificCP(const Colour& colour){
   CP.remove(colour);
 }
 
-void Player::setAllCP(const Colour colour){
+void Player::setAllCP(const Colour& colour){
   int number_of_cp = CP.size();
   CP.clear();
   for(int i = 0; i < number_of_cp; i++){
