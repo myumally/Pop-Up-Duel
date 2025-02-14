@@ -7,6 +7,7 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <random>
 
 #include "All_Cards.hpp"
 #include "Card.hpp"
