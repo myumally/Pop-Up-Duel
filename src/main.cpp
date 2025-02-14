@@ -1,7 +1,5 @@
 #include "../include/all_includes.hpp"
 #include <SFML/Graphics.hpp>
-#include <vector>
-#include "../include/DeckCreationMenu.hpp"
 
 std::vector<std::string> ImageNames = {
   "001_explosion.jpg",
@@ -175,6 +173,9 @@ int main(int, char**) {
   for (Card* c : p2->getDeck()){
     std::cout << "Carte : " << c->getId() << std::endl;
   }
+
+  InGameInterface igi(sprites, p1, p2);
+  igi.run(window, AllCards);
 
   return 0;
 }
