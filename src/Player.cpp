@@ -86,6 +86,19 @@ void Player::addCard(Card* card) {
   }
 }
 
+void Player::addCard(int id, std::array<Card*, 122> AllCards) {
+  if(!(AllCards.empty())){
+    std::array<Card*, 122>::iterator it;
+    for(it = AllCards.begin(); it != AllCards.end(); it++){
+      if((*it)->getId() == id){
+        addCard(*it);
+        break;
+      }
+    }
+  }
+}
+
+
 void Player::removeCard(Card* card) {
   if(!(deck.empty())){
     deck.remove(card);

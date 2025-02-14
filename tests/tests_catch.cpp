@@ -1,6 +1,7 @@
 #include "../include/all_includes.hpp"
 #include "../src/Card.cpp"
 #include "../src/Player.cpp"
+#include "../src/All_Cards.cpp"
 
 TEST_CASE("Constructeur Card 1") {
     Card c(1, "monster", "attack", Grey, Red, {Green, Blue}, Nothing, 1);
@@ -128,6 +129,21 @@ TEST_CASE("Deck Management 4") {
     p1.removeCard(5);
 
     CHECK( 14 == p1.getDeck().size());
+ 
+}
+
+TEST_CASE("Deck Management 5") {
+    Player p1("player1");
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.addCard( new Card(i, "monster", "attack", Red, Grey, {Green, Yellow}, Nothing, 1));
+    }
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.removeCard(i);
+    }
+
+    CHECK( 0 == p1.getDeck().size());
  
 }
 
@@ -261,4 +277,26 @@ TEST_CASE("All Cards 1") {
     CHECK(Blank == AllCards[121]->getBlueZone());
     CHECK(Sword == AllCards[121]->getYellowZone());
     CHECK(true == AllCards[121]->hasSwordAttack());
+}
+
+TEST_CASE("Deck Management x AllCards") {
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    Player p1("player1");
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.addCard( i+6, AllCards);
+    }
+
+    std::list<Card*> deck = p1.getDeck();
+    
+    std::list<Card*>::iterator it = deck.begin();
+    for (int i = 0; i < 15; ++i, ++it) {
+        CHECK(i+6 == (*it)->getId());
+    }
+
+    for(int i = 0; i < DECK_SIZE; i++){
+      p1.removeCard(i+6);
+    }
+
+    CHECK( 0 == p1.getDeck().size());
 }

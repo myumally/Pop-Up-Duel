@@ -51,6 +51,7 @@ class Player{
   void loseLP(int n); 
 
   void addCard(Card* card);
+  void addCard(int id, std::array<Card*, 122> AllCards);
   void removeCard(Card* card);
   void removeCard(int id);
   bool isDeckComplete() const;
