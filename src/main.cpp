@@ -135,16 +135,6 @@ std::vector<std::string> ImageNames = {
 
 int main(int, char**) {
 
-  /*
-  // Get Screen Dimension
-  sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-  unsigned int screenHeight = desktopMode.height;
-
-  // Create Window
-  sf::RenderWindow window(sf::VideoMode(screenHeight * 0.9 * 1.5, screenHeight * 0.9), "Deck Creation");
-
-  */
-
   // Create textures and sprites
   std::vector<sf::Texture> textures(122);
   std::vector<sf::Sprite> sprites(122);
@@ -155,91 +145,18 @@ int main(int, char**) {
     if (!textures[i].loadFromFile(filename)) {
     }
     sprites[i].setTexture(textures[i]);
-    sprites[i].setScale(2.0f, 2.0f);
+
   }
 
-  // Scroll Management
-  float scrollOffset = 0.f;
-  float scrollSpeed = 20.f;
-/*
-  // Main Loop
+  std::array<Card*, 122> AllCards = Cards_Creation();
 
-  // mouse's position and state
-  int x = 0;
-  int y = 0;
-  int mouse_state = 0;
+  Player* p1 = new Player("PlayerOne");
+  DeckCreationMenu dcm(sprites, p1);
+  dcm.run(AllCards);
 
-  // id of the card pointed by the mouse
-  int id_mouse_card = 0;
-
-  sf::Event event;
-
-  while (window.isOpen()) {
-
-    mouse_state = 0;
-
-    while (window.pollEvent(event))
-    {
-      // check the type of the event...
-      switch (event.type)
-      {
-        // window closed
-        case sf::Event::Closed:
-          window.close();
-          break;
-
-        
-        case sf::Event::MouseWheelScrolled:
-          if (event.mouseWheelScroll.delta > 0) {
-            scrollOffset += scrollSpeed;
-          } else {
-            scrollOffset -= scrollSpeed;
-          }
-          break;
-
-        case sf::Event::MouseButtonPressed:
-          x = event.mouseButton.x;
-          y = event.mouseButton.y;
-          mouse_state = 1;          
-          break;
-
-        case sf::Event::MouseMoved:
-          x = event.mouseMove.x;
-          y = event.mouseMove.y;          
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    // update
-
-    if (mouse_state == 1){
-      for (int i = 0; i < 122; ++i){
-        if (sprites[i].getGlobalBounds().contains(x, y)){
-          id_mouse_card = i + 1;
-          std::cout << "La souris est sur l'image " << id_mouse_card << std::endl;
-
-        }
-      }
-    }
-
-    // render
-
-    window.clear();
-
-    for (int i = 0; i < 122; ++i){
-      sprites[i].setPosition(600.f + (i%3) * 300.f, ((i/3) * 400.f) + scrollOffset);
-      window.draw(sprites[i]); 
-    }
-
-    window.display();
+  for (Card* c : p1->getDeck()){
+    std::cout << "Carte : " << c->getId() << std::endl;
   }
-  */
-
-  DeckCreationMenu dcm(sprites);
-  dcm.run();
 
   return 0;
 }
