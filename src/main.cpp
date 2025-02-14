@@ -167,11 +167,11 @@ int main(int, char**) {
   dcm.run(window, AllCards);
 
   for (Card* c : p1->getDeck()){
-    std::cout << "Carte : " << c->getId() << std::endl;
+    std::cout << "Carte joueur 1 : " << c->getId() << std::endl;
   }
 
   for (Card* c : p2->getDeck()){
-    std::cout << "Carte : " << c->getId() << std::endl;
+    std::cout << "Carte joueur 2 : " << c->getId() << std::endl;
   }
 
   InGameInterface igi(sprites, p1, p2);
