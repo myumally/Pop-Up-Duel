@@ -5,23 +5,41 @@ DeckCreationMenu::DeckCreationMenu(std::vector<sf::Sprite> Sprites, Player* p){
   player = p;
 }
 
-void DeckCreationMenu::run(const std::array<Card*, 122>& AllCards) {
+void DeckCreationMenu::setPlayer(Player* p){
+  player = p;
+}
+
+Player* DeckCreationMenu::getPlayer(){
+  return player;
+}
+
+
+void DeckCreationMenu::run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards) {
+
+  window.setTitle("Deck Creation");
 
   bool RUN = true;
 
   std::list<Card*> deck = player->getDeck();
 
-  // Get Screen Dimension
-  sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-  unsigned int screenHeight = desktopMode.height;
-
-  // Create Window
-  sf::RenderWindow window(sf::VideoMode(screenHeight * 0.9 * 1.5, screenHeight * 0.9), "Deck Creation");
-
   sf::RectangleShape BehindCard;
   BehindCard.setSize(sf::Vector2f(950.f, 2000.f));
   BehindCard.setFillColor(sf::Color(200, 200, 180));
   BehindCard.setPosition(550.f, 0);
+
+  sf::RectangleShape Confirm;
+  Confirm.setSize(sf::Vector2f(0.f, 0.f));
+  Confirm.setFillColor(sf::Color(255, 255, 155));
+  Confirm.setPosition(850.f, 500.f);
+
+  sf::Font font;
+  if (!(font.loadFromFile("assets/fonts/Unique.ttf"))){
+   std::cout << "error while getting font " << std::endl; 
+  }
+    sf::Text ConfirmText("Confirm Deck", font, 50); 
+    ConfirmText.setFillColor(sf::Color(100, 100, 0));
+    ConfirmText.setPosition(850.f, 500.f);
+  
 
   int cardCount = 0;
 
@@ -69,7 +87,7 @@ void DeckCreationMenu::run(const std::array<Card*, 122>& AllCards) {
           x = event.mouseMove.x;
           y = event.mouseMove.y;          
           break;
-
+ 
         default:
           break;
       }
@@ -80,20 +98,20 @@ void DeckCreationMenu::run(const std::array<Card*, 122>& AllCards) {
     if (mouse_state == 1){
       for (int i = 0; i < 122; ++i){
         if (sprites[i].getGlobalBounds().contains(x, y)){
-          id_mouse_card = i + 1;
-          std::cout << "La souris est sur l'image " << id_mouse_card << std::endl;
+          id_mouse_card = i + 1; 
 
           if (std::find(SelectedCards.begin(), SelectedCards.end(), id_mouse_card) != SelectedCards.end()){
-            std::cout << "remove " << id_mouse_card << std::endl;
             player->removeCard(id_mouse_card);
             SelectedCards.erase(std::remove(SelectedCards.begin(), SelectedCards.end(), id_mouse_card), SelectedCards.end());
           } 
 
           else if(!player->isDeckComplete()) {
-            std::cout << "add " << id_mouse_card << std::endl;
             player->addCard(id_mouse_card, AllCards); 
             SelectedCards.push_back(id_mouse_card);
           } 
+        }
+        else if (Confirm.getGlobalBounds().contains(x, y)){
+          RUN = false;
         }
       }
       deck = player->getDeck();
@@ -119,6 +137,12 @@ void DeckCreationMenu::run(const std::array<Card*, 122>& AllCards) {
       sprites[c->getId() - 1].setScale(1.f, 1.f);
       sprites[c->getId() - 1].setPosition(55.f + ((cardCount - 1)%3) * 150.f, (((cardCount - 1)/3) * 200.f) );
       window.draw(sprites[c->getId() - 1]);
+    }
+
+    if(player->isDeckComplete() == true){
+      Confirm.setSize(sf::Vector2f(400.f, 70.f));
+      window.draw(Confirm); 
+      window.draw(ConfirmText);
     }
 
     window.display();

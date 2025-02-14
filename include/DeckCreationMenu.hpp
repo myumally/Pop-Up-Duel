@@ -17,8 +17,10 @@ class DeckCreationMenu {
   float scrollSpeed = 20.f;
 
   public:
+    void setPlayer(Player* p);
+    Player* getPlayer();
     DeckCreationMenu(std::vector<sf::Sprite> Sprites, Player* p);
-    void run(const std::array<Card*, 122>& AllCards);
+    void run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards);
 };
 
 #endif

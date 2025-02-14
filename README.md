@@ -30,7 +30,7 @@
     - [ ] Specials
 - [ ] User Interface
   - [x] Choosing what to use for graphics -> **SFML**
-  - [ ] Deck Creation Menu
+  - [x] Deck Creation Menu
   - [ ] Home Menu
   - [ ] InGame Interface
 - [ ] Network Play

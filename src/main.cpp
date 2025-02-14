@@ -145,16 +145,34 @@ int main(int, char**) {
     if (!textures[i].loadFromFile(filename)) {
     }
     sprites[i].setTexture(textures[i]);
-
   }
 
+  // Create the Cards
   std::array<Card*, 122> AllCards = Cards_Creation();
 
+  // Get Screen Dimension
+  sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+  unsigned int screenHeight = desktopMode.height;
+
+  // Create Window
+  sf::RenderWindow window(sf::VideoMode(screenHeight * 0.9 * 1.5, screenHeight * 0.9), "Pop-Up Duel");
+
+  // Create the Players
   Player* p1 = new Player("PlayerOne");
+  Player* p2 = new Player("PlayerTwo");
+
+  // Card selection
   DeckCreationMenu dcm(sprites, p1);
-  dcm.run(AllCards);
+  dcm.run(window, AllCards);
+
+  dcm.setPlayer(p2);
+  dcm.run(window, AllCards);
 
   for (Card* c : p1->getDeck()){
+    std::cout << "Carte : " << c->getId() << std::endl;
+  }
+
+  for (Card* c : p2->getDeck()){
     std::cout << "Carte : " << c->getId() << std::endl;
   }
 
