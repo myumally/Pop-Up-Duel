@@ -34,12 +34,13 @@ void DeckCreationMenu::run(sf::RenderWindow& window, const std::array<Card*, 122
 
   sf::Font font;
   if (!(font.loadFromFile("assets/fonts/Unique.ttf"))){
-   std::cout << "error while getting font " << std::endl; 
+    std::cout << "error while getting font " << std::endl; 
   }
-    sf::Text ConfirmText("Confirm Deck", font, 50); 
-    ConfirmText.setFillColor(sf::Color(100, 100, 0));
-    ConfirmText.setPosition(850.f, 500.f);
-  
+  sf::Text ConfirmText("Confirm Deck", font, 50); 
+  ConfirmText.setFillColor(sf::Color(100, 100, 0));
+  ConfirmText.setPosition(850.f, 500.f);
+
+  scrollOffset = 0.f;
 
   int cardCount = 0;
 
@@ -87,7 +88,7 @@ void DeckCreationMenu::run(sf::RenderWindow& window, const std::array<Card*, 122
           x = event.mouseMove.x;
           y = event.mouseMove.y;          
           break;
- 
+
         default:
           break;
       }
