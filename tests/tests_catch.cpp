@@ -1,4 +1,6 @@
 #include "../include/all_includes.hpp"
+#include "catch.hpp"
+
 #include "../src/Card.cpp"
 #include "../src/Player.cpp"
 #include "../src/All_Cards.cpp"
