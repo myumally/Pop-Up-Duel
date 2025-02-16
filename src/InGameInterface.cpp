@@ -30,18 +30,42 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   std::uniform_int_distribution<std::mt19937::result_type> getRandomInt(0,DECK_SIZE -1); // distribution in range [0, DECK_SIZE - 1]
 
 
+  float CardSpriteWidth;
+  float CardSpriteHeight;
+
+  Colour col;
+
+
   sf::Font font;
   if (!(font.loadFromFile("assets/fonts/Unique.ttf"))){
     std::cout << "error while getting font " << std::endl; 
   }
 
-  sf::Text PlayerOneName(player1->getName(), font, 50); 
+  sf::Text PlayerOneName({player1->getName() + " - " + std::to_string(player1->getLP()) + "LP"}, font, 50); 
   PlayerOneName.setFillColor(sf::Color(100, 100, 0));
-  PlayerOneName.setPosition(850.f, 500.f);
+  PlayerOneName.setPosition(50.f, 100.f);
 
-  sf::Text PlayerTwoName(player2->getName(), font, 50); 
+  sf::Text PlayerTwoName({player2->getName() + " - " + std::to_string(player2->getLP()) + "LP"}, font, 50); 
   PlayerTwoName.setFillColor(sf::Color(100, 100, 0));
-  PlayerTwoName.setPosition(850.f, 500.f);
+  PlayerTwoName.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f), 100.f);
+
+
+  sf::Vector2f rectSize(60.f, 90.f);
+
+  sf::RectangleShape BlueRect(rectSize);
+  BlueRect.setFillColor(sf::Color::Blue);
+
+  sf::RectangleShape YellowRect(rectSize);
+  YellowRect.setFillColor(sf::Color::Yellow);
+
+  sf::RectangleShape GreenRect(rectSize);
+  GreenRect.setFillColor(sf::Color::Green);
+
+  sf::RectangleShape RedRect(rectSize);
+  RedRect.setFillColor(sf::Color::Red);
+
+  sf::RectangleShape GreyRect(rectSize);
+  GreyRect.setFillColor(sf::Color(100, 100, 100));
 
 
   std::list<Card*> listDeck1 = player1->getDeck();
@@ -143,11 +167,55 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
 
     cardCount = 0;
     for (int id : PlayerOneHand ){ 
+
       sprites[id - 1].setScale(2.0f, 2.0f);
-      sprites[id - 1].setPosition(600.f + (cardCount%3) * 300.f, ((cardCount/3) * 400.f) + 400.f);
+      CardSpriteWidth = sprites[id - 1].getTexture()->getSize().x * sprites[id - 1].getScale().x;
+      CardSpriteHeight = sprites[id - 1].getTexture()->getSize().y * sprites[id - 1].getScale().y;
+
+      sprites[id - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + (cardCount%3) * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
       ++cardCount;
       window.draw(sprites[id - 1]); 
     }
+
+    for (int id : PlayerTwoHand ){ 
+      col = AllCards[id - 1]->getColour();
+
+      switch (col) {
+        case Red:
+          RedRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+          window.draw(RedRect);
+          break;
+
+        case Green:
+          GreenRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+          window.draw(GreenRect);
+          break;
+
+        case Blue:
+          BlueRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+          window.draw(BlueRect);
+          break;
+
+        case Yellow:
+          YellowRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+          window.draw(YellowRect);
+          break;
+
+        case Grey:
+          GreyRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+          window.draw(GreyRect);
+          break;
+
+        default:
+          
+          break;
+      }
+
+      ++cardCount;   
+    }
+
+    window.draw(PlayerOneName);
+    window.draw(PlayerTwoName);
 
     window.display();
   }

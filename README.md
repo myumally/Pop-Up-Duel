@@ -33,4 +33,10 @@
   - [x] Deck Creation Menu
   - [ ] Home Menu
   - [ ] InGame Interface
+    - [x] Each player draw 3 cards from their deck
+    - [x] Active player cards in the center
+    - [x] Opponent card's colours in the corner
+    - [x] Player's names and LP
+    - [ ] Player's CP
+    - [ ] Combat Phase
 - [ ] Network Play
