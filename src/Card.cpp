@@ -14,6 +14,17 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour swor
   SwordAttack = true;
   SwordZone = swordZone;
 
+  for(int i = 0; i < 4; ++i){
+    Zones[i] = Blank;
+  }
+
+  if(swordZone)
+    Zones[swordZone - 1] = Sword;
+
+  for(Colour c : GuardZones){
+    Zones[c - 1] = Shield;
+  }
+
   switch (swordZone) {
     case 1:
       RedZone = Sword; 
@@ -69,6 +80,11 @@ Card::Card(Card& c){
   // Zones 
 
   SwordAttack = c.hasSwordAttack();
+  SwordZone = c.getSwordZone();
+  Zones = c.getZones();
+
+
+
   RedZone = c.getRedZone(); 
   GreenZone = c.getGreenZone();
   BlueZone = c.getBlueZone();
@@ -119,6 +135,9 @@ void Card::setSwordZone(const Colour& swordZone){
   SwordAttack = true;
   SwordZone = swordZone;
 
+  if(swordZone)
+    Zones[swordZone - 1] = Sword;
+
   switch (swordZone) {
     case 1:
       RedZone = Sword; 
@@ -142,11 +161,16 @@ Colour Card::getSwordZone() const{
   return SwordZone;
 }
 
+std::array<ZoneType, 4> Card::getZones() const{
+  return Zones;
+}
+
 ZoneType Card::getRedZone() const {
   return RedZone;
 }
 void Card::setRedZone(const ZoneType& newRedZone) {
   RedZone = newRedZone;
+  Zones[0] = Shield;
 }
 
 ZoneType Card::getGreenZone() const {
@@ -154,6 +178,7 @@ ZoneType Card::getGreenZone() const {
 }
 void Card::setGreenZone(const ZoneType& newGreenZone) {
   GreenZone = newGreenZone;
+  Zones[1] = Shield;
 }
 
 ZoneType Card::getBlueZone() const {
@@ -161,6 +186,7 @@ ZoneType Card::getBlueZone() const {
 }
 void Card::setBlueZone(const ZoneType& newBlueZone) {
   BlueZone = newBlueZone;
+  Zones[2] = Shield;
 }
 
 ZoneType Card::getYellowZone() const {
@@ -168,7 +194,11 @@ ZoneType Card::getYellowZone() const {
 }
 void Card::setYellowZone(const ZoneType& newYellowZone) {
   YellowZone = newYellowZone;
+  Zones[3] = Shield;
 }
+
+
+
 
 int Card::getNumberOfZoneType(const ZoneType& type) const{
   int n = 0;

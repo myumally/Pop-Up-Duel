@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <array>
 #include <iostream>
 
 enum ZoneType {Blank, Sword, Shield};
@@ -37,8 +38,11 @@ class Card{
   ZoneType GreenZone = Blank;
   ZoneType BlueZone = Blank;
   ZoneType YellowZone = Blank;
+
+
   bool SwordAttack;
   Colour SwordZone;
+  std::array<ZoneType, 4> Zones;
 
   Effect effect = Nothing;
   int strength;
@@ -65,6 +69,8 @@ class Card{
 
   void setSwordZone(const Colour& swordZone);
   Colour getSwordZone() const;
+
+  std::array<ZoneType, 4> getZones() const;
 
   ZoneType getRedZone() const;
   void setRedZone(const ZoneType& newRedZone);
