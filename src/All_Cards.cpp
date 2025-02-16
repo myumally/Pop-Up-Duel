@@ -202,7 +202,7 @@ std::array<Card*, 122> Cards_Creation(){
 
   for(int i = 0; i < 108; i++){
     ALL_CARDS[i]->setMonsterName(MonsterNames[i/6]);
-    ALL_CARDS[i]->setColour(static_cast<Colour>(1 + i/24));
+    ALL_CARDS[i]->setColour(static_cast<Colour>((1 + i/24)%5));
   }
 
   for(int i = 0; i < 10; i++){
