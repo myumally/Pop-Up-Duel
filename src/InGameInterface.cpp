@@ -1,5 +1,31 @@
 #include "../include/InGameInterface.hpp"
 
+void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
+  Colour FocusZone;
+  if(c1->hasSwordAttack()){
+    FocusZone = c1->getSwordZone();
+    switch (c2->getZones()[FocusZone - 1]) {
+      case Blank:
+        p2->loseLP(c1->getStrength());
+        break;
+
+      case Sword:
+        p2->loseLP(c1->getStrength()/2);
+        break;
+
+      case Shield:
+        if(!c2->hasSwordAttack()){
+          p1->loseLP(c2->getStrength());
+        }
+        break;
+
+      default:
+
+        break;
+    }
+  }
+}
+
 void InGameInterface::setPlayers(Player* p1, Player* p2){
   player1 = p1;
   player2 = p2;
@@ -24,6 +50,8 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   window.setTitle("Pop-Up Duel !");
 
   bool RUN = true;
+  bool RUN_SELECTION_PHASE = true;
+  bool RUN_COMBAT_PHASE = false;
 
   std::random_device dev;
   std::mt19937 rng(dev());
@@ -130,94 +158,187 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
 
   while (window.isOpen() && RUN) {
 
-    mouse_state = 0;
+    while(window.isOpen() && RUN_SELECTION_PHASE){
 
-    while (window.pollEvent(event))
-    {
-      // check the type of the event...
-      switch (event.type)
+      mouse_state = 0;
+
+      while (window.pollEvent(event))
       {
-        // window closed
-        case sf::Event::Closed:
-          window.close();
-          break;
+        // check the type of the event...
+        switch (event.type)
+        {
+          // window closed
+          case sf::Event::Closed:
+            window.close();
+            break;
 
-        case sf::Event::MouseButtonPressed:
-          x = event.mouseButton.x;
-          y = event.mouseButton.y;
-          mouse_state = 1;          
-          break;
+          case sf::Event::MouseButtonPressed:
+            x = event.mouseButton.x;
+            y = event.mouseButton.y;
+            mouse_state = 1;          
+            break;
 
-        case sf::Event::MouseMoved:
-          x = event.mouseMove.x;
-          y = event.mouseMove.y;          
-          break;
+          case sf::Event::MouseMoved:
+            x = event.mouseMove.x;
+            y = event.mouseMove.y;          
+            break;
 
-        default:
-          break;
-      }
-    }
-
-    // update
-
-
-    // render
-
-    window.clear();
-
-    cardCount = 0;
-    for (int id : PlayerOneHand ){ 
-
-      sprites[id - 1].setScale(2.0f, 2.0f);
-      CardSpriteWidth = sprites[id - 1].getTexture()->getSize().x * sprites[id - 1].getScale().x;
-      CardSpriteHeight = sprites[id - 1].getTexture()->getSize().y * sprites[id - 1].getScale().y;
-
-      sprites[id - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + (cardCount%3) * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
-      ++cardCount;
-      window.draw(sprites[id - 1]); 
-    }
-
-    for (int id : PlayerTwoHand ){ 
-      col = AllCards[id - 1]->getColour();
-
-      switch (col) {
-        case Red:
-          RedRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
-          window.draw(RedRect);
-          break;
-
-        case Green:
-          GreenRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
-          window.draw(GreenRect);
-          break;
-
-        case Blue:
-          BlueRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
-          window.draw(BlueRect);
-          break;
-
-        case Yellow:
-          YellowRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
-          window.draw(YellowRect);
-          break;
-
-        case Grey:
-          GreyRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
-          window.draw(GreyRect);
-          break;
-
-        default:
-          
-          break;
+          default:
+            break;
+        }
       }
 
-      ++cardCount;   
+      // update
+
+      if (mouse_state == 1){
+        for (int i : PlayerOneHand){
+          if (sprites[i - 1].getGlobalBounds().contains(x, y)){
+            id_mouse_card = i;
+            PlayerOneSelectedCard = id_mouse_card;
+            PlayerTwoSelectedCard = PlayerTwoHand[0];
+            RUN_SELECTION_PHASE = false;
+            RUN_COMBAT_PHASE = true;
+          }
+        }
+      }
+
+
+      // render
+
+      window.clear();
+
+      cardCount = 0;
+      for (int id : PlayerOneHand ){ 
+
+        sprites[id - 1].setScale(2.0f, 2.0f);
+        CardSpriteWidth = sprites[id - 1].getTexture()->getSize().x * sprites[id - 1].getScale().x;
+        CardSpriteHeight = sprites[id - 1].getTexture()->getSize().y * sprites[id - 1].getScale().y;
+
+        sprites[id - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + (cardCount%3) * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
+        ++cardCount;
+        window.draw(sprites[id - 1]); 
+      }
+
+      for (int id : PlayerTwoHand ){ 
+        col = AllCards[id - 1]->getColour();
+
+        switch (col) {
+          case Red:
+            RedRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+            window.draw(RedRect);
+            break;
+
+          case Green:
+            GreenRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+            window.draw(GreenRect);
+            break;
+
+          case Blue:
+            BlueRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+            window.draw(BlueRect);
+            break;
+
+          case Yellow:
+            YellowRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+            window.draw(YellowRect);
+            break;
+
+          case Grey:
+            GreyRect.setPosition(window.getSize().x - 300.f + (cardCount%3) * (80.f), window.getSize().y - 150.f);
+            window.draw(GreyRect);
+            break;
+
+          default:
+
+            break;
+        }
+
+        ++cardCount;   
+      }
+
+      window.draw(PlayerOneName);
+      window.draw(PlayerTwoName);
+
+      window.display();
     }
 
-    window.draw(PlayerOneName);
-    window.draw(PlayerTwoName);
+    while(window.isOpen() && RUN_COMBAT_PHASE){
 
-    window.display();
+      mouse_state = 0;
+
+      while (window.pollEvent(event))
+      {
+        // check the type of the event...
+        switch (event.type)
+        {
+          // window closed
+          case sf::Event::Closed:
+            window.close();
+            break;
+
+          case sf::Event::MouseButtonPressed:
+            x = event.mouseButton.x;
+            y = event.mouseButton.y;
+            mouse_state = 1;          
+            break;
+
+          case sf::Event::MouseMoved:
+            x = event.mouseMove.x;
+            y = event.mouseMove.y;          
+            break;
+
+          default:
+            break;
+        }
+      }
+
+      // update
+
+      CombatPhase(player1, AllCards[PlayerOneSelectedCard - 1], player2, AllCards[PlayerTwoSelectedCard - 1]);
+      CombatPhase(player2, AllCards[PlayerTwoSelectedCard - 1], player1, AllCards[PlayerOneSelectedCard - 1]);
+      PlayerOneName.setString({player1->getName() + " - " + std::to_string(player1->getLP()) + "LP"});
+      PlayerTwoName.setString({player2->getName() + " - " + std::to_string(player2->getLP()) + "LP"});
+
+      Drawed_Id = vectDeck1[getRandomInt(rng)]->getId();
+      while(std::find(PlayerOneHand.begin(), PlayerOneHand.end(), Drawed_Id) != PlayerOneHand.end()){
+        Drawed_Id = vectDeck1[getRandomInt(rng)]->getId();;
+      }
+      PlayerOneHand.push_back(Drawed_Id);
+
+      Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+      while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
+        Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+      }
+      PlayerTwoHand.push_back(Drawed_Id);
+
+      PlayerOneHand.erase(std::remove(PlayerOneHand.begin(), PlayerOneHand.end(), PlayerOneSelectedCard), PlayerOneHand.end());
+      PlayerTwoHand.erase(std::remove(PlayerTwoHand.begin(), PlayerTwoHand.end(), PlayerTwoSelectedCard), PlayerTwoHand.end()); 
+
+      RUN_COMBAT_PHASE = false;
+      RUN_SELECTION_PHASE = true;
+
+
+      // render
+
+      window.clear(); 
+
+      sprites[PlayerOneSelectedCard - 1].setScale(2.0f, 2.0f);
+      sprites[PlayerTwoSelectedCard - 1].setScale(2.0f, 2.0f);
+
+      CardSpriteWidth = sprites[PlayerOneSelectedCard - 1].getTexture()->getSize().x * sprites[PlayerOneSelectedCard - 1].getScale().x;
+      CardSpriteHeight = sprites[PlayerOneSelectedCard - 1].getTexture()->getSize().y * sprites[PlayerOneSelectedCard - 1].getScale().y;
+
+      sprites[PlayerOneSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f, (window.getSize().y - CardSpriteHeight)/2);
+      sprites[PlayerTwoSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + 2 * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
+
+      window.draw(sprites[PlayerOneSelectedCard - 1]);
+      window.draw(sprites[PlayerTwoSelectedCard - 1]);
+
+      window.draw(PlayerOneName);
+      window.draw(PlayerTwoName);
+
+      window.display();
+    }
   }
 
 }

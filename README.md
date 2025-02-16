@@ -38,5 +38,13 @@
     - [x] Opponent card's colours in the corner
     - [x] Player's names and LP
     - [ ] Player's CP
+    - [ ] 15 seconds to choose a card and Priority Management
     - [ ] Combat Phase
+        - [x] LP Management
+        - [ ] CP Management
+        - [x] Hand Management
+        - [ ] Priority 
+        - [ ] Effects
+        - [ ] Specials
+        - [ ] Little Animation
 - [ ] Network Play

@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <optional>
 
+void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2);
 
 class InGameInterface {
 
