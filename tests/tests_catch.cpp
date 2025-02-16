@@ -17,6 +17,7 @@ TEST_CASE("Constructeur Card 1") {
     CHECK(Shield == c.getBlueZone());
     CHECK(Blank == c.getYellowZone());
     CHECK(true == c.hasSwordAttack());
+    CHECK(Red == c.getSwordZone());
     CHECK(Nothing == c.getEffect());
     CHECK(1 == c.getStrength());
 }
@@ -30,6 +31,7 @@ TEST_CASE("Constructeur Card 2") {
     CHECK(0 == c.getNumberOfZoneType(Sword));
     CHECK(2 == c.getNumberOfZoneType(Shield));
     CHECK(2 == c.getNumberOfZoneType(Blank));
+    CHECK(Grey == c.getSwordZone());
 }
 
 TEST_CASE("Constructeur Card 3") {
@@ -37,6 +39,7 @@ TEST_CASE("Constructeur Card 3") {
 
     CHECK(Red == c.getColour());
     CHECK(c.hasSwordAttack());
+    CHECK(Red == c.getSwordZone());
     CHECK(Nothing == c.getEffect());
     CHECK(1 == c.getNumberOfZoneType(Sword));
     CHECK(0 == c.getNumberOfZoneType(Shield));
@@ -224,6 +227,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Ifrit" == AllCards[0]->getMonsterName());
     CHECK("Fireblast" == AllCards[0]->getAttackName());
     CHECK(Red == AllCards[0]->getColour());
+    CHECK(Red == AllCards[0]->getSwordZone());
     CHECK(Sword == AllCards[0]->getRedZone());
     CHECK(Shield == AllCards[0]->getGreenZone());
     CHECK(Blank == AllCards[0]->getBlueZone());
@@ -234,6 +238,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Bomb" == AllCards[11]->getMonsterName());
     CHECK("Explode+" == AllCards[11]->getAttackName());
     CHECK(Red == AllCards[11]->getColour());
+    CHECK(Red == AllCards[11]->getSwordZone());
     CHECK(Sword == AllCards[11]->getRedZone());
     CHECK(Blank == AllCards[11]->getGreenZone());
     CHECK(Blank == AllCards[11]->getBlueZone());
@@ -244,6 +249,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Leviathan" == AllCards[55]->getMonsterName());
     CHECK("Thunder Storm" == AllCards[55]->getAttackName());
     CHECK(Blue == AllCards[55]->getColour());
+    CHECK(Yellow == AllCards[55]->getSwordZone());
     CHECK(Blank == AllCards[55]->getRedZone());
     CHECK(Blank == AllCards[55]->getGreenZone());
     CHECK(Blank == AllCards[55]->getBlueZone());
@@ -254,6 +260,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Tonberry" == AllCards[108]->getMonsterName());
     CHECK("Poison Cloud" == AllCards[108]->getAttackName());
     CHECK(Grey == AllCards[108]->getColour());
+    CHECK(Grey == AllCards[108]->getSwordZone());
     CHECK(Blank == AllCards[108]->getRedZone());
     CHECK(Shield == AllCards[108]->getGreenZone());
     CHECK(Blank == AllCards[108]->getBlueZone());
@@ -264,6 +271,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Typhon" == AllCards[119]->getMonsterName());
     CHECK("Chow Time" == AllCards[119]->getAttackName());
     CHECK(Green == AllCards[119]->getColour());
+    CHECK(Green == AllCards[119]->getSwordZone());
     CHECK(Blank == AllCards[119]->getRedZone());
     CHECK(Sword == AllCards[119]->getGreenZone());
     CHECK(Blank == AllCards[119]->getBlueZone());
@@ -274,6 +282,7 @@ TEST_CASE("All Cards 1") {
     CHECK("Typhon" == AllCards[121]->getMonsterName());
     CHECK("Body Splash" == AllCards[121]->getAttackName());
     CHECK(Yellow == AllCards[121]->getColour());
+    CHECK(Yellow == AllCards[121]->getSwordZone());
     CHECK(Blank == AllCards[121]->getRedZone());
     CHECK(Blank == AllCards[121]->getGreenZone());
     CHECK(Blank == AllCards[121]->getBlueZone());

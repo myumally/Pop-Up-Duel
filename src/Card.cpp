@@ -1,6 +1,6 @@
 #include "../include/Card.hpp"
 
-Card::Card(int n, std::string monster, std::string attack, Colour c, Colour SwordZone, std::list<Colour> GuardZones, Effect e, int s){
+Card::Card(int n, std::string monster, std::string attack, Colour c, Colour swordZone, std::list<Colour> GuardZones, Effect e, int s){
 
   // Card
 
@@ -12,8 +12,9 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour Swor
   // Zones 
 
   SwordAttack = true;
+  SwordZone = swordZone;
 
-  switch (SwordZone) {
+  switch (swordZone) {
     case 1:
       RedZone = Sword; 
       break;
@@ -114,10 +115,11 @@ void Card::setColour(const Colour& newColour) {
   colour = newColour;
 }
 
-void Card::setSwordZone(const Colour& SwordZone){
+void Card::setSwordZone(const Colour& swordZone){
   SwordAttack = true;
+  SwordZone = swordZone;
 
-  switch (SwordZone) {
+  switch (swordZone) {
     case 1:
       RedZone = Sword; 
       break;
@@ -134,6 +136,10 @@ void Card::setSwordZone(const Colour& SwordZone){
       SwordAttack = false;
       break;
   }
+}
+
+Colour Card::getSwordZone() const{
+  return SwordZone;
 }
 
 ZoneType Card::getRedZone() const {

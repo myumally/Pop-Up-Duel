@@ -38,13 +38,14 @@ class Card{
   ZoneType BlueZone = Blank;
   ZoneType YellowZone = Blank;
   bool SwordAttack;
+  Colour SwordZone;
 
   Effect effect = Nothing;
   int strength;
 
   public :
 
-  Card(int n, std::string monster, std::string attack, Colour c, Colour SwordZone, std::list<Colour> GuardZones, Effect e, int s);
+  Card(int n, std::string monster, std::string attack, Colour c, Colour swordZone, std::list<Colour> GuardZones, Effect e, int s);
   Card(Card& c);
   ~Card();
 
@@ -62,7 +63,8 @@ class Card{
   Colour getColour() const;
   void setColour(const Colour& newColour);
 
-  void setSwordZone(const Colour& SwordZone);
+  void setSwordZone(const Colour& swordZone);
+  Colour getSwordZone() const;
 
   ZoneType getRedZone() const;
   void setRedZone(const ZoneType& newRedZone);
