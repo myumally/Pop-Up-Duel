@@ -22,9 +22,15 @@ class Player{
   int LP = MAX_LP;
   std::list<Colour> CP;
 
-  Effect AffectedBy = Nothing;
+  Effect AffectedBySelfEffect = Nothing;
+  Effect AffectedByOpponentEffect = Nothing;
+
+  bool Priority = true;
 
   public :
+
+  static std::array<Effect, 3> SelfEffect;
+  static std::array<Effect, 7> OpponentEffect;
 
   Player(const std::string& name);
   Player(const Player& p);
@@ -44,8 +50,12 @@ class Player{
 
   std::list<Colour> getCP() const;
 
-  Effect isAffectedBy() const;
+  Effect isAffectedBySelfEffect() const;
+  Effect isAffectedByOpponentEffect() const;
   void setAffectedBy(Effect effect);
+
+  bool hasPriority() const;
+  void setPriority(bool b);
 
   void recoverLP(int n);
   void loseLP(int n); 

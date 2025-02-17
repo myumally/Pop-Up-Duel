@@ -46,12 +46,34 @@ std::list<Colour> Player::getCP() const {
   return CP;
 }
 
-Effect Player::isAffectedBy() const{
-  return AffectedBy;
+std::array<Effect, 3> Player::SelfEffect = {Protect, Refresh, Haste};
+
+std::array<Effect, 7> Player::OpponentEffect = {Burn, Freeze, Numb, Poison, Silence, Slow};
+
+Effect Player::isAffectedBySelfEffect() const{
+  return AffectedBySelfEffect;
+}
+
+Effect Player::isAffectedByOpponentEffect() const{
+  return AffectedByOpponentEffect;
 }
 
 void Player::setAffectedBy(Effect effect){
-  AffectedBy = effect;
+  if(std::find(SelfEffect.begin(), SelfEffect.end(), effect) != SelfEffect.end())
+    AffectedBySelfEffect = effect;
+  else if (std::find(OpponentEffect.begin(), OpponentEffect.end(), effect) != OpponentEffect.end())
+    AffectedByOpponentEffect = effect;
+  else{
+    AffectedBySelfEffect = effect;
+    AffectedByOpponentEffect = effect;
+  }
+}
+
+bool Player::hasPriority() const{
+  return Priority;
+}
+void Player::setPriority(bool b){
+  Priority = b;
 }
 
 // LP Management
