@@ -60,7 +60,8 @@ TEST_CASE("Constructeur Player") {
     CHECK( 1 == p2.getId());
     CHECK("player1" == p1.getName());
     CHECK(20 == p1.getLP());
-    CHECK(Nothing == p1.isAffectedBy());
+    CHECK(Nothing == p1.isAffectedBySelfEffect());
+    CHECK(Nothing == p1.isAffectedByOpponentEffect());
 }
 
 TEST_CASE("LP Management 1") {
@@ -341,3 +342,18 @@ TEST_CASE("Deck Management x AllCards") {
 
     CHECK( 0 == p1.getDeck().size());
 }
+
+TEST_CASE("All Cards 2") {
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(Nothing == AllCards[0]->getEffect());
+    CHECK(Silence == AllCards[13]->getEffect());
+    CHECK(Poison == AllCards[27]->getEffect());
+    CHECK(Refresh == AllCards[62]->getEffect());
+    CHECK(Numb == AllCards[80]->getEffect());
+    CHECK(Haste == AllCards[100]->getEffect());
+    CHECK(Slow == AllCards[109]->getEffect());
+    CHECK(Protect == AllCards[29]->getEffect());
+    CHECK(Freeze == AllCards[120]->getEffect());
+    CHECK(Burn == AllCards[118]->getEffect());
+}
+
