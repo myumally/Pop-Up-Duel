@@ -130,18 +130,28 @@ void createCrystalShape(sf::ConvexShape& ColourCrystal, sf::Vector2f Up, sf::Vec
 
 
 std::string effectToString(Effect ef) {
-    switch (ef) {
-        case Burn:    return "Burn";
-        case Freeze:    return "Freeze";
-        case Numb:    return "Numb";
-        case Poison:    return "Poison";
-        case Silence:    return "Silence";
-        case Protect:    return "Protect";
-        case Refresh:    return "Refresh";
-        case Haste:    return "Haste";
-        case Slow:    return "Slow";
-        default: return " ";
-    }
+  switch (ef) {
+    case Burn:
+      return "Burn";
+    case Freeze:    
+      return "Freeze";
+    case Numb:    
+      return "Numb";
+    case Poison:    
+      return "Poison";
+    case Silence:    
+      return "Silence";
+    case Protect:    
+      return "Protect";
+    case Refresh:    
+      return "Refresh";
+    case Haste:    
+      return "Haste";
+    case Slow:    
+      return "Slow";
+    default: 
+      return " ";
+  }
 }
 
 
@@ -182,7 +192,7 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   Effect1.setPosition(50.f, 250.f);
   sf::Text Effect2(" ", font, 50);
   Effect2.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f), 250.f);
- 
+
 
   sf::Vector2f rectSize(60.f, 90.f);
 
@@ -410,7 +420,7 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
             break;
 
           default:
-            
+
             break;
         }
         ++crystalCount;
@@ -434,14 +444,14 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
             BlueCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
             window.draw(BlueCrystal);
             break;
- 
+
           case Yellow:
             YellowCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
             window.draw(YellowCrystal);
             break;
 
           default:
-            
+
             break;
         }
         ++crystalCount;
@@ -530,7 +540,7 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
       window.draw(sprites[PlayerOneSelectedCard - 1]);
 
       sprites[PlayerTwoSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + 2 * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
- 
+
       window.draw(sprites[PlayerTwoSelectedCard - 1]);
 
       window.draw(PlayerOneName);

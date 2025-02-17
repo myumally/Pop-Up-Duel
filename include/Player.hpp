@@ -75,6 +75,6 @@ class Player{
   int getNumberOfCP(const std::list<Colour>& colours) const;
   int getNumberOfMostAbundantCP() const;
 
- };
+};
 
 #endif
