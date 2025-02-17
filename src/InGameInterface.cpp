@@ -1,21 +1,71 @@
 #include "../include/InGameInterface.hpp"
 
-void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
+
+int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPower2){
+  int NewAttackPower2 = AttackPower2;
+  switch (opponentEf) {
+    case Burn:
+      if(c2->getColour() == Red) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Poison:
+      if(c2->getColour() == Green) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Freeze:
+      if(c2->getColour() == Blue) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Numb:
+      if(c2->getColour() == Yellow) NewAttackPower2 = NewAttackPower2 * 2;
+      break; 
+
+    case Silence:
+      // to-do annuler crystal ability
+      break;
+
+    default:
+      break;
+  }
+
+  if(selfEf == Protect){
+    NewAttackPower2 = NewAttackPower2 / 2;
+  }
+
+  return NewAttackPower2;
+}
+
+void AffectNewEffect(Player* p1, Card* c1, Player* p2){
+  if(std::find(Player::OpponentEffect.begin(), Player::OpponentEffect.end(), c1->getEffect()) != Player::OpponentEffect.end()){
+    p2->setAffectedBy(c1->getEffect());
+  }
+  else if (std::find(Player::SelfEffect.begin(), Player::SelfEffect.end(), c1->getEffect()) != Player::SelfEffect.end()){
+    p1->setAffectedBy(c1->getEffect());
+  }
+}
+
+void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, int AttackPower1, int AttackPower2){
   Colour FocusZone;
   if(c1->hasSwordAttack()){
     FocusZone = c1->getSwordZone();
     switch (c2->getZones()[FocusZone - 1]) {
       case Blank:
-        p2->loseLP(c1->getStrength());
+        AffectNewEffect(p1, c1, p2);
+        if(p2->isAffectedBySelfEffect() == Refresh) p2->loseLP(c1->getStrength()); 
+        else p2->loseLP(AttackPower1); 
         break;
 
       case Sword:
-        p2->loseLP(c1->getStrength()/2);
+        AffectNewEffect(p1, c1, p2);
+        if(p2->isAffectedBySelfEffect() == Refresh) p2->loseLP(c1->getStrength()/2);
+        else p2->loseLP(AttackPower1/2); 
         break;
 
       case Shield:
         if(!c2->hasSwordAttack()){
-          p1->loseLP(c2->getStrength());
+          AffectNewEffect(p2, c2, p1);
+          if(p1->isAffectedBySelfEffect() == Refresh) p1->loseLP(c2->getStrength());
+          else p1->loseLP(AttackPower2);
         }
         break;
 
@@ -24,6 +74,31 @@ void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
         break;
     }
   }
+
+  if(c1->getColour() != Grey){
+    p1->addCP(c1->getColour());
+  }
+}
+
+void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
+
+  Effect OldSelfEffect1 = p1->isAffectedBySelfEffect();
+  Effect OldOpponentEffect1 = p1->isAffectedByOpponentEffect();
+
+  Effect OldSelfEffect2 = p2->isAffectedBySelfEffect();
+  Effect OldOpponentEffect2 = p2->isAffectedByOpponentEffect();
+
+  int AttackPower1 = c1->getStrength();
+  int AttackPower2 = c2->getStrength();
+
+  AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
+  AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower2);
+
+  p1->setAffectedBy(Nothing);
+  p2->setAffectedBy(Nothing);
+
+  AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
+  AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
 }
 
 void InGameInterface::setPlayers(Player* p1, Player* p2){
@@ -44,6 +119,31 @@ InGameInterface::InGameInterface(std::vector<sf::Sprite> Sprites, Player* p1, Pl
   player1 = p1;
   player2 = p2;
 }
+
+void createCrystalShape(sf::ConvexShape& ColourCrystal, sf::Vector2f Up, sf::Vector2f Right, sf::Vector2f Down, sf::Vector2f Left){
+  ColourCrystal.setPointCount(4);
+  ColourCrystal.setPoint(0, Up);
+  ColourCrystal.setPoint(1, Right);
+  ColourCrystal.setPoint(2, Down);
+  ColourCrystal.setPoint(3, Left);
+}
+
+
+std::string effectToString(Effect ef) {
+    switch (ef) {
+        case Burn:    return "Burn";
+        case Freeze:    return "Freeze";
+        case Numb:    return "Numb";
+        case Poison:    return "Poison";
+        case Silence:    return "Silence";
+        case Protect:    return "Protect";
+        case Refresh:    return "Refresh";
+        case Haste:    return "Haste";
+        case Slow:    return "Slow";
+        default: return " ";
+    }
+}
+
 
 void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards){
 
@@ -78,6 +178,12 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   PlayerTwoName.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f), 100.f);
 
 
+  sf::Text Effect1(" ", font, 50);
+  Effect1.setPosition(50.f, 250.f);
+  sf::Text Effect2(" ", font, 50);
+  Effect2.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f), 250.f);
+ 
+
   sf::Vector2f rectSize(60.f, 90.f);
 
   sf::RectangleShape BlueRect(rectSize);
@@ -94,6 +200,28 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
 
   sf::RectangleShape GreyRect(rectSize);
   GreyRect.setFillColor(sf::Color(100, 100, 100));
+
+
+  sf::Vector2f Up(25.f, 0.f);
+  sf::Vector2f Right(50.f, 25.f);
+  sf::Vector2f Down(25.f, 50.f);
+  sf::Vector2f Left(0.f, 25.f);
+
+  sf::ConvexShape BlueCrystal;
+  createCrystalShape(BlueCrystal, Up, Right, Down, Left);
+  BlueCrystal.setFillColor(sf::Color::Blue);
+
+  sf::ConvexShape YellowCrystal;
+  createCrystalShape(YellowCrystal, Up, Right, Down, Left);
+  YellowCrystal.setFillColor(sf::Color::Yellow);
+
+  sf::ConvexShape GreenCrystal;
+  createCrystalShape(GreenCrystal, Up, Right, Down, Left);
+  GreenCrystal.setFillColor(sf::Color::Green);
+
+  sf::ConvexShape RedCrystal;
+  createCrystalShape(RedCrystal, Up, Right, Down, Left);
+  RedCrystal.setFillColor(sf::Color::Red);
 
 
   std::list<Card*> listDeck1 = player1->getDeck();
@@ -127,6 +255,7 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   }
 
   int cardCount = 0;
+  int crystalCount = 0;
 
 
   for (Card* c : listDeck1){
@@ -256,8 +385,73 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
         ++cardCount;   
       }
 
+      crystalCount = 0;
+
+      for(Colour crystal : player1->getCP()){
+        switch (crystal) {
+          case Red:
+            RedCrystal.setPosition(50.f + (crystalCount%10) * (50.f), 180.f);
+            window.draw(RedCrystal);
+            break;
+
+          case Green:
+            GreenCrystal.setPosition(50.f + (crystalCount%10) * (50.f), 180.f);
+            window.draw(GreenCrystal);
+            break;
+
+          case Blue:
+            BlueCrystal.setPosition(50.f + (crystalCount%10) * (50.f), 180.f);
+            window.draw(BlueCrystal);
+            break;
+
+          case Yellow:
+            YellowCrystal.setPosition(50.f + (crystalCount%10) * (50.f), 180.f);
+            window.draw(YellowCrystal);
+            break;
+
+          default:
+            
+            break;
+        }
+        ++crystalCount;
+      }
+
+      crystalCount = 0;
+
+      for(Colour crystal : player2->getCP()){
+        switch (crystal) {
+          case Red:
+            RedCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
+            window.draw(RedCrystal);
+            break;
+
+          case Green:
+            GreenCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
+            window.draw(GreenCrystal);
+            break;
+
+          case Blue:
+            BlueCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
+            window.draw(BlueCrystal);
+            break;
+ 
+          case Yellow:
+            YellowCrystal.setPosition(window.getSize().x - (PlayerTwoName.getGlobalBounds().width + 50.f) + (crystalCount%10) * (50.f), 180.f);
+            window.draw(YellowCrystal);
+            break;
+
+          default:
+            
+            break;
+        }
+        ++crystalCount;
+      }
+
       window.draw(PlayerOneName);
       window.draw(PlayerTwoName);
+
+      window.draw(Effect1);
+      window.draw(Effect2);
 
       window.display();
     }
@@ -294,10 +488,13 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
 
       // update
 
-      CombatPhase(player1, AllCards[PlayerOneSelectedCard - 1], player2, AllCards[PlayerTwoSelectedCard - 1]);
-      CombatPhase(player2, AllCards[PlayerTwoSelectedCard - 1], player1, AllCards[PlayerOneSelectedCard - 1]);
+      CombatPhase(player1, AllCards[PlayerOneSelectedCard - 1], player2, AllCards[PlayerTwoSelectedCard - 1]); 
+
       PlayerOneName.setString({player1->getName() + " - " + std::to_string(player1->getLP()) + "LP"});
       PlayerTwoName.setString({player2->getName() + " - " + std::to_string(player2->getLP()) + "LP"});
+
+      Effect1.setString({effectToString(player1->isAffectedBySelfEffect()) + " " + effectToString(player1->isAffectedByOpponentEffect())});
+      Effect2.setString({effectToString(player2->isAffectedBySelfEffect()) + " " + effectToString(player2->isAffectedByOpponentEffect())});
 
       Drawed_Id = vectDeck1[getRandomInt(rng)]->getId();
       while(std::find(PlayerOneHand.begin(), PlayerOneHand.end(), Drawed_Id) != PlayerOneHand.end()){
@@ -329,15 +526,18 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
       CardSpriteHeight = sprites[PlayerOneSelectedCard - 1].getTexture()->getSize().y * sprites[PlayerOneSelectedCard - 1].getScale().y;
 
       sprites[PlayerOneSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f, (window.getSize().y - CardSpriteHeight)/2);
-      sprites[PlayerTwoSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + 2 * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
 
       window.draw(sprites[PlayerOneSelectedCard - 1]);
+
+      sprites[PlayerTwoSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + 2 * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
+ 
       window.draw(sprites[PlayerTwoSelectedCard - 1]);
 
       window.draw(PlayerOneName);
       window.draw(PlayerTwoName);
 
       window.display();
+      sf::sleep(sf::seconds(3));
     }
   }
 
