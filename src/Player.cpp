@@ -48,7 +48,7 @@ std::list<Colour> Player::getCP() const {
 
 std::array<Effect, 3> Player::SelfEffect = {Protect, Refresh, Haste};
 
-std::array<Effect, 7> Player::OpponentEffect = {Burn, Freeze, Numb, Poison, Silence, Slow};
+std::array<Effect, 6> Player::OpponentEffect = {Burn, Freeze, Numb, Poison, Silence, Slow};
 
 Effect Player::isAffectedBySelfEffect() const{
   return AffectedBySelfEffect;
@@ -63,7 +63,7 @@ void Player::setAffectedBy(Effect effect){
     AffectedBySelfEffect = effect;
   else if (std::find(OpponentEffect.begin(), OpponentEffect.end(), effect) != OpponentEffect.end())
     AffectedByOpponentEffect = effect;
-  else{
+  else if (effect == Nothing){
     AffectedBySelfEffect = effect;
     AffectedByOpponentEffect = effect;
   }

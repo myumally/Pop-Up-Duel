@@ -30,7 +30,7 @@ class Player{
   public :
 
   static std::array<Effect, 3> SelfEffect;
-  static std::array<Effect, 7> OpponentEffect;
+  static std::array<Effect, 6> OpponentEffect;
 
   Player(const std::string& name);
   Player(const Player& p);
