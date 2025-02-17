@@ -10,7 +10,7 @@ enum ZoneType {Blank, Sword, Shield};
 
 enum Colour {Grey, Red, Green, Blue, Yellow};
 
-enum Effect {Nothing, Burn, Freeze, Numb, Poison, Silence, Protect, Haste, Slow};
+enum Effect {Nothing, Burn, Freeze, Numb, Poison, Silence, Protect, Refresh, Haste, Slow};
 
 enum Special {
   Crystal_Ability,
@@ -21,8 +21,7 @@ enum Special {
   CP_Crush,
   CP_Drain,
   Risky_Move,
-  Recover,
-  Refresh
+  Recover
 };
 
 // To-Do : gérer les spéciaux
