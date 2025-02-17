@@ -7,7 +7,6 @@
   - [x] Constructor
   - [x] Getters and Setters
   - [x] ZoneTypes and Colours
-  - [ ] Effects Management
   - [ ] Specials Management
 - [ ] Player Class
   - [x] Constructor
@@ -25,7 +24,7 @@
     - [x] Card Colours
     - [x] Sword Zones 
     - [x] Guard Zones
-    - [ ] Effects
+    - [x] Effects
     - [ ] Strength
     - [ ] Specials
 - [ ] User Interface
@@ -37,14 +36,15 @@
     - [x] Active player cards in the center
     - [x] Opponent card's colours in the corner
     - [x] Player's names and LP
-    - [ ] Player's CP
+    - [x] Player's CP
+    - [x] Player's Effects
     - [ ] 15 seconds to choose a card and Priority Management
     - [ ] Combat Phase
         - [x] LP Management
-        - [ ] CP Management
+        - [x] CP Management
         - [x] Hand Management
         - [ ] Priority 
-        - [ ] Effects
+        - [x] Effects Management
         - [ ] Specials
         - [ ] Little Animation
 - [ ] Network Play
