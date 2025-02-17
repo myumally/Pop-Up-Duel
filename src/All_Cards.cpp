@@ -190,6 +190,26 @@ std::array<int, 37> BlueShield = { 20, 25, 26, 27, 28, 29, 30, 32, 34, 39, 40, 4
 
 std::array<int, 30> YellowShield = { 3, 6, 8, 17, 18, 25, 26, 27, 28, 29, 30, 32, 34, 38, 45, 46, 73, 75, 76, 77, 80, 81, 82, 88, 92, 97, 102, 109, 111, 116 };
 
+// std::array<std::string, 122> Strength = {  };
+
+std::array<int, 6> BurnEffect = { 6, 7, 8, 16, 118, 119 };
+
+std::array<int, 5> PoisonEffect = { 28, 33, 36, 109, 120 };
+
+std::array<int, 4> FreezeEffect = { 49, 65, 108, 121 };
+
+std::array<int, 4> NumbEffect = { 81, 86, 105, 122 };
+
+std::array<int, 4> SilenceEffect = { 14, 37, 61, 73 };
+
+std::array<int, 3> ProtectEffect = { 20, 30, 85 };
+
+std::array<int, 2> RefreshEffect = { 38, 63 };
+
+std::array<int, 3> HasteEffect = { 31, 74, 101 };
+
+std::array<int, 3> SlowEffect = { 29, 92, 110 };
+
 
 std::array<Card*, 122> Cards_Creation(){
 
@@ -246,6 +266,36 @@ std::array<Card*, 122> Cards_Creation(){
     if (isInArray(i+1, YellowShield)) {
       ALL_CARDS[i]->setYellowZone(Shield);
     } 
+  }
+
+  for (int i = 0; i < 122; ++i) {        
+    if (isInArray(i+1, BurnEffect)) {
+      ALL_CARDS[i]->setEffect(Burn);
+    } 
+    else if (isInArray(i+1, PoisonEffect)) {
+      ALL_CARDS[i]->setEffect(Poison);
+    } 
+    else if (isInArray(i+1, FreezeEffect)) {
+      ALL_CARDS[i]->setEffect(Freeze);
+    } 
+    else if (isInArray(i+1, NumbEffect)) {
+      ALL_CARDS[i]->setEffect(Numb);
+    } 
+    else if (isInArray(i+1, SilenceEffect)) {
+      ALL_CARDS[i]->setEffect(Silence);
+    }
+    else if (isInArray(i+1, ProtectEffect)) {
+      ALL_CARDS[i]->setEffect(Protect);
+    }
+    else if (isInArray(i+1, RefreshEffect)) {
+      ALL_CARDS[i]->setEffect(Refresh);
+    }
+    else if (isInArray(i+1, HasteEffect)) {
+      ALL_CARDS[i]->setEffect(Haste);
+    }
+    else if (isInArray(i+1, SlowEffect)) {
+      ALL_CARDS[i]->setEffect(Slow);
+    }
   }
 
   return ALL_CARDS;
