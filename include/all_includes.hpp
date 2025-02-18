@@ -14,5 +14,6 @@
 #include "Player.hpp"
 #include "DeckCreationMenu.hpp"
 #include "InGameInterface.hpp"
+#include "NetworkPlay.hpp"
 
 #endif

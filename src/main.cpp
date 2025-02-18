@@ -1,5 +1,6 @@
 #include "../include/all_includes.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 std::vector<std::string> ImageNames = {
   "001_explosion.jpg",
@@ -131,7 +132,71 @@ std::vector<std::string> ImageNames = {
 };
 
 
+sf::TcpSocket socket;
+sf::TcpListener listener;
+sf::SocketSelector selector;
+bool isHost = false;
+bool connected = false;
+const unsigned short PORT = 44000;
+
+
+void runGame(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, const std::vector<sf::Sprite>& sprites, sf::TcpSocket &socket, Player* p1, Player* p2, std::vector<int>& ids1, std::vector<int>& ids2){
+
+  DeckCreationMenu dcm(sprites, p1);
+  dcm.run(window, AllCards);
+
+  for (Card* c : p1->getDeck()){
+    std::cout << "Carte : " << c->getId() << std::endl;
+    ids1.push_back(c->getId());
+  }
+
+  sendIds(socket, ids1, 15);
+  receiveIds(socket, ids2, 15);
+
+  for (int id : ids2){
+    p2->addCard(id, AllCards);
+  }
+  for (Card* c : p2->getDeck()){
+    std::cout << "Carte adversaire : " << c->getId() << std::endl;
+  }
+
+  InGameInterface igi(sprites, p1, p2);
+  igi.run(window, AllCards, socket);
+
+}
+
+
 int main(int, char**) {
+
+  sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
+
+  std::cout << "Trying to connect to an existing host at " << localIP << "...\n";
+  if (socket.connect(localIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
+    isHost = false;
+    std::cout << "Connected to host at " << localIP << "!\n";
+  } else {
+    isHost = true;
+    std::cout << "No host found. Starting as host...\n";
+
+    if (listener.listen(PORT) != sf::Socket::Done) {
+      std::cerr << "Error: Could not start listening on port " << PORT << "\n";
+      return -1;
+    }
+
+    std::cout << "Waiting for opponent to connect...\n";
+    while (listener.accept(socket) != sf::Socket::Done) {
+      std::cout << "Still waiting for a connection...\n";
+      sf::sleep(sf::seconds(1)); // Petite pause pour éviter d'utiliser 100% du CPU
+    }
+    std::cout << "Opponent connected!\n";
+
+  }
+
+  connected = true;
+
+  std::vector<int> ids1;
+  std::vector<int> ids2;
+
 
   // Create textures and sprites
   std::vector<sf::Texture> textures(122);
@@ -160,22 +225,17 @@ int main(int, char**) {
   Player* p2 = new Player("PlayerTwo");
 
   // Card selection
-  DeckCreationMenu dcm(sprites, p1);
-  dcm.run(window, AllCards);
+  // p1 p2 ids1 ids2
+  if(isHost){
 
-  dcm.setPlayer(p2);
-  dcm.run(window, AllCards);
+    runGame(window, AllCards, sprites, socket, p1, p2, ids1, ids2);
 
-  for (Card* c : p1->getDeck()){
-    std::cout << "Carte joueur 1 : " << c->getId() << std::endl;
+  } 
+  else {
+
+    runGame(window, AllCards, sprites, socket, p2, p1, ids2, ids1);
+
   }
-
-  for (Card* c : p2->getDeck()){
-    std::cout << "Carte joueur 2 : " << c->getId() << std::endl;
-  }
-
-  InGameInterface igi(sprites, p1, p2);
-  igi.run(window, AllCards);
 
   return 0;
 }

@@ -114,7 +114,7 @@ Player* InGameInterface::getPlayerTwo(){
   return player2;
 }
 
-InGameInterface::InGameInterface(std::vector<sf::Sprite> Sprites, Player* p1, Player* p2){
+InGameInterface::InGameInterface(const std::vector<sf::Sprite>& Sprites, Player* p1, Player* p2){
   sprites = Sprites;
   player1 = p1;
   player2 = p2;
@@ -155,7 +155,7 @@ std::string effectToString(Effect ef) {
 }
 
 
-void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards){
+void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, sf::TcpSocket& socket){
 
   window.setTitle("Pop-Up Duel !");
 
@@ -256,33 +256,31 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
     PlayerOneHand.push_back(Drawed_Id);
   }
 
-  for(int i = 0; i < 3; i++){
-    Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
-    while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
-      Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
-    }
-    PlayerTwoHand.push_back(Drawed_Id);
-  }
+  sendIds(socket, PlayerOneHand, 3);
+  receiveIds(socket, PlayerTwoHand, 3);
+
+/*
+     for(int i = 0; i < 3; i++){
+     Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+     while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
+     Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+     }
+     PlayerTwoHand.push_back(Drawed_Id);
+     }
+*/
+
 
   int cardCount = 0;
   int crystalCount = 0;
 
 
-  for (Card* c : listDeck1){
-    if (std::find(PlayerOneHand.begin(), PlayerOneHand.end(), c->getId()) != PlayerOneHand.end()){
-      std::cout << "Carte piochée joueur 1 : " << c->getId() << std::endl;
-    }
-    ++cardCount;
+  for (int id : PlayerOneHand){
+    std::cout << "Carte piochée : " << id << std::endl;
   }
-  cardCount = 0;
 
-  for (Card* c : listDeck2){
-    if (std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), c->getId()) != PlayerTwoHand.end()){
-      std::cout << "Carte piochée joueur 2 : " << c->getId() << std::endl;
-    }
-    ++cardCount;
+  for (int id : PlayerTwoHand){
+    std::cout << "Carte piochée adversaire : " << id << std::endl;
   }
-  cardCount = 0;
 
 
   // mouse's position and state
@@ -334,7 +332,11 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
           if (sprites[i - 1].getGlobalBounds().contains(x, y)){
             id_mouse_card = i;
             PlayerOneSelectedCard = id_mouse_card;
-            PlayerTwoSelectedCard = PlayerTwoHand[0];
+
+            sendId(socket, PlayerOneSelectedCard);
+            receiveId(socket, PlayerTwoSelectedCard);
+
+            // PlayerTwoSelectedCard = PlayerTwoHand[0];
             RUN_SELECTION_PHASE = false;
             RUN_COMBAT_PHASE = true;
           }
@@ -512,14 +514,21 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
       }
       PlayerOneHand.push_back(Drawed_Id);
 
+      PlayerOneHand.erase(std::remove(PlayerOneHand.begin(), PlayerOneHand.end(), PlayerOneSelectedCard), PlayerOneHand.end());
+
+      sendIds(socket, PlayerOneHand, 3);
+      receiveIds(socket, PlayerTwoHand, 3);
+
+/*
       Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
       while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
         Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
       }
       PlayerTwoHand.push_back(Drawed_Id);
 
-      PlayerOneHand.erase(std::remove(PlayerOneHand.begin(), PlayerOneHand.end(), PlayerOneSelectedCard), PlayerOneHand.end());
+      
       PlayerTwoHand.erase(std::remove(PlayerTwoHand.begin(), PlayerTwoHand.end(), PlayerTwoSelectedCard), PlayerTwoHand.end()); 
+*/ 
 
       RUN_COMBAT_PHASE = false;
       RUN_SELECTION_PHASE = true;
