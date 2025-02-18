@@ -48,3 +48,4 @@
         - [ ] Specials
         - [ ] Little Animation
 - [ ] Network Play
+    - [x] Local Network Play
