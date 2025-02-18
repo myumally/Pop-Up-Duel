@@ -69,7 +69,7 @@ void Player::setAffectedBy(Effect effect){
   }
 }
 
-bool Player::hasPriority() const{
+bool& Player::hasPriority() {
   return Priority;
 }
 void Player::setPriority(bool b){
