@@ -256,5 +256,8 @@ int main(int, char**) {
 
   }
 
+  socket.disconnect();
+  listener.close();
+
   return 0;
 }
