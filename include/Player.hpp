@@ -25,7 +25,7 @@ class Player{
   Effect AffectedBySelfEffect = Nothing;
   Effect AffectedByOpponentEffect = Nothing;
 
-  bool Priority = true;
+  bool Priority = false;
 
   public :
 
@@ -54,7 +54,7 @@ class Player{
   Effect isAffectedByOpponentEffect() const;
   void setAffectedBy(Effect effect);
 
-  bool hasPriority() const;
+  bool& hasPriority();
   void setPriority(bool b);
 
   void recoverLP(int n);
