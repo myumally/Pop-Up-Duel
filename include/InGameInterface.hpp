@@ -9,7 +9,7 @@
 
 // Effects Management 
 
-// void PriorityManagement(Player* p1, Player* p2);
+void PriorityManagement(Player* p1, Player* p2);
 
 int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPower2);
 
