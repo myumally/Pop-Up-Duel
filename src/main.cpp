@@ -31,7 +31,7 @@ std::vector<std::string> ImageNames = {
   "026_carapacep.jpg",
   "027_carapacemiracle.jpg",
 
-  "027_carapacemiracle.jpg",
+  "028_MiraculousShell_plus.jpeg",
 
   "029_somnifere.jpg",
   "030_gardetotale.jpg",
@@ -39,7 +39,7 @@ std::vector<std::string> ImageNames = {
   "032_piege.jpg",
   "033_dardempoisonne.jpg",
 
-  "033_dardempoisonne.jpg",
+  "034_Cactuar_Photosynthesis.jpeg",
 
   "035_1000epines.jpg",
   "036_1000epinesp.jpg",
@@ -140,20 +140,36 @@ bool connected = false;
 const unsigned short PORT = 44000;
 
 
-void runGame(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, const std::vector<sf::Sprite>& sprites, sf::TcpSocket &socket, Player* p1, Player* p2, std::vector<int>& ids1, std::vector<int>& ids2){
+void WaitingScreen(sf::RenderWindow& window, const sf::Font& font, std::string text){
+
+  sf::Text WaitingTtext(text, font, 50);
+  WaitingTtext.setPosition((window.getSize().x - WaitingTtext.getGlobalBounds().width)/2, (window.getSize().y - WaitingTtext.getGlobalBounds().height)/2);
+
+  window.clear();
+  window.draw(WaitingTtext);
+  window.display();
+
+}
+
+
+void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, const std::vector<sf::Sprite>& sprites, sf::TcpSocket &socket, Player* p1, Player* p2){
+
+  std::vector<int> Player_ids;
+  std::vector<int> Opponent_ids;
 
   DeckCreationMenu dcm(sprites, p1);
   dcm.run(window, AllCards);
 
   for (Card* c : p1->getDeck()){
     std::cout << "Carte : " << c->getId() << std::endl;
-    ids1.push_back(c->getId());
+    Player_ids.push_back(c->getId());
   }
 
-  sendIds(socket, ids1, 15);
-  receiveIds(socket, ids2, 15);
+  sendIds(socket, Player_ids, 15);
+  WaitingScreen(window, font, "Waiting for opponent to select their cards");
+  receiveIds(socket, Opponent_ids, 15);
 
-  for (int id : ids2){
+  for (int id : Opponent_ids){
     p2->addCard(id, AllCards);
   }
   for (Card* c : p2->getDeck()){
@@ -161,15 +177,30 @@ void runGame(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, c
   }
 
   InGameInterface igi(sprites, p1, p2);
-  igi.run(window, AllCards, socket);
+  igi.run(window, font, AllCards, socket);
 
 }
 
 
 int main(int, char**) {
 
+  // Get Screen Dimension
+  sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+  unsigned int screenHeight = desktopMode.height;
+
+  // Create Window
+  sf::RenderWindow window(sf::VideoMode(screenHeight * 0.9 * 1.5, screenHeight * 0.9), "Pop-Up Duel");
+
+  // Get the font
+  sf::Font font;
+  if (!(font.loadFromFile("assets/fonts/Unique.ttf"))){
+    std::cout << "error while getting font " << std::endl; 
+  }
+
+  // Get Local IP Adress
   sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
 
+  // Connection
   std::cout << "Trying to connect to an existing host at " << localIP << "...\n";
   if (socket.connect(localIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
     isHost = false;
@@ -183,19 +214,15 @@ int main(int, char**) {
       return -1;
     }
 
-    std::cout << "Waiting for opponent to connect...\n";
+    WaitingScreen(window, font, "Waiting for opponent to connect");
     while (listener.accept(socket) != sf::Socket::Done) {
-      std::cout << "Still waiting for a connection...\n";
-      sf::sleep(sf::seconds(1)); // Petite pause pour éviter d'utiliser 100% du CPU
+      sf::sleep(sf::seconds(1));
     }
     std::cout << "Opponent connected!\n";
 
   }
 
-  connected = true;
-
-  std::vector<int> ids1;
-  std::vector<int> ids2;
+  connected = true; 
 
 
   // Create textures and sprites
@@ -213,27 +240,19 @@ int main(int, char**) {
   // Create the Cards
   std::array<Card*, 122> AllCards = Cards_Creation();
 
-  // Get Screen Dimension
-  sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-  unsigned int screenHeight = desktopMode.height;
-
-  // Create Window
-  sf::RenderWindow window(sf::VideoMode(screenHeight * 0.9 * 1.5, screenHeight * 0.9), "Pop-Up Duel");
-
   // Create the Players
   Player* p1 = new Player("PlayerOne");
   Player* p2 = new Player("PlayerTwo");
 
-  // Card selection
-  // p1 p2 ids1 ids2
+  // Run the Game
   if(isHost){
 
-    runGame(window, AllCards, sprites, socket, p1, p2, ids1, ids2);
+    runGame(window, font, AllCards, sprites, socket, p1, p2);
 
   } 
   else {
 
-    runGame(window, AllCards, sprites, socket, p2, p1, ids2, ids1);
+    runGame(window, font, AllCards, sprites, socket, p2, p1);
 
   }
 

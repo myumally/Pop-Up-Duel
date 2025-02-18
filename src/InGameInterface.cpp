@@ -155,7 +155,7 @@ std::string effectToString(Effect ef) {
 }
 
 
-void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, sf::TcpSocket& socket){
+void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, sf::TcpSocket& socket){
 
   window.setTitle("Pop-Up Duel !");
 
@@ -172,12 +172,6 @@ void InGameInterface::run(sf::RenderWindow& window, const std::array<Card*, 122>
   float CardSpriteHeight;
 
   Colour col;
-
-
-  sf::Font font;
-  if (!(font.loadFromFile("assets/fonts/Unique.ttf"))){
-    std::cout << "error while getting font " << std::endl; 
-  }
 
   sf::Text PlayerOneName({player1->getName() + " - " + std::to_string(player1->getLP()) + "LP"}, font, 50); 
   PlayerOneName.setFillColor(sf::Color(100, 100, 0));

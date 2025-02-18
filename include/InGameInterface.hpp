@@ -36,7 +36,7 @@ class InGameInterface {
     Player* getPlayerOne();
     Player* getPlayerTwo();
     InGameInterface(const std::vector<sf::Sprite>& Sprites, Player* p1, Player* p2);
-    void run(sf::RenderWindow& window, const std::array<Card*, 122>& AllCards, sf::TcpSocket &socket);
+    void run(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, sf::TcpSocket &socket);
 };
 
 #endif
