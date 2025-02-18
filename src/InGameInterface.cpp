@@ -1,5 +1,15 @@
 #include "../include/InGameInterface.hpp"
 
+void PriorityManagement(Player* p1, Player* p2){
+  if(p1->isAffectedBySelfEffect() == Haste && p2->isAffectedBySelfEffect() != Haste){
+    p1->setPriority(true);
+    p2->setPriority(false);
+  }
+  else if(p1->isAffectedByOpponentEffect() == Slow && p2->isAffectedByOpponentEffect() != Slow){
+    p2->setPriority(true);
+    p1->setPriority(false);
+  } 
+}
 
 int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPower2){
   int NewAttackPower2 = AttackPower2;
@@ -94,11 +104,22 @@ void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
   AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
   AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower2);
 
+  PriorityManagement(p1, p2);
+
   p1->setAffectedBy(Nothing);
   p2->setAffectedBy(Nothing);
 
-  AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
-  AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
+  if(p1->hasPriority()){
+    AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
+    AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
+  }
+  else {
+    AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
+    AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
+  }
+
+  p1->setPriority(false);
+  p2->setPriority(false);
 }
 
 void InGameInterface::setPlayers(Player* p1, Player* p2){
@@ -162,6 +183,9 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   bool RUN = true;
   bool RUN_SELECTION_PHASE = true;
   bool RUN_COMBAT_PHASE = false;
+
+  sf::Clock clock;
+  const float timeLimit = 15.0f;
 
   std::random_device dev;
   std::mt19937 rng(dev());
@@ -289,6 +313,8 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 
   while (window.isOpen() && RUN) {
 
+    clock.restart();
+
     while(window.isOpen() && RUN_SELECTION_PHASE){
 
       mouse_state = 0;
@@ -321,11 +347,22 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 
       // update
 
+      if(!player2->hasPriority()){
+        sendBool(socket, player1->hasPriority());
+        receiveBool(socket, player2->hasPriority()); 
+      }
+
       if (mouse_state == 1){
         for (int i : PlayerOneHand){
           if (sprites[i - 1].getGlobalBounds().contains(x, y)){
             id_mouse_card = i;
             PlayerOneSelectedCard = id_mouse_card;
+
+            if(!player2->hasPriority()){
+              player1->setPriority(true);
+              sendBool(socket, player1->hasPriority());
+              receiveBool(socket, player2->hasPriority());
+            }
 
             sendId(socket, PlayerOneSelectedCard);
             receiveId(socket, PlayerTwoSelectedCard);
@@ -335,6 +372,15 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
             RUN_COMBAT_PHASE = true;
           }
         }
+      } 
+      else if (clock.getElapsedTime().asSeconds() >= timeLimit){
+        PlayerOneSelectedCard = PlayerOneHand[0];
+
+        sendId(socket, PlayerOneSelectedCard);
+        receiveId(socket, PlayerTwoSelectedCard);
+
+        RUN_SELECTION_PHASE = false;
+        RUN_COMBAT_PHASE = true;
       }
 
 
@@ -519,7 +565,6 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
         Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
       }
       PlayerTwoHand.push_back(Drawed_Id);
-
       
       PlayerTwoHand.erase(std::remove(PlayerTwoHand.begin(), PlayerTwoHand.end(), PlayerTwoSelectedCard), PlayerTwoHand.end()); 
 */ 

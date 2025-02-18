@@ -56,3 +56,28 @@ void receiveId(sf::TcpSocket &socket, int& id) {
 
   std::cout << "id reçu !\n";
 }
+
+void sendBool(sf::TcpSocket &socket, bool& b) {
+  sf::Packet packet;
+
+  packet << b;
+
+  if (socket.send(packet) != sf::Socket::Done) {
+    std::cerr << "Erreur lors de l'envoi\n";
+  } else {
+    std::cout << "bool envoyé !\n";
+  }
+}
+
+void receiveBool(sf::TcpSocket &socket, bool& b) {
+  sf::Packet packet;
+
+  if (socket.receive(packet) != sf::Socket::Done) {
+    std::cerr << "Erreur lors de la réception\n";
+    return;
+  }
+
+  packet >> b;
+
+  std::cout << "bool reçu !\n";
+}

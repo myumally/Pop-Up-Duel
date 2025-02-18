@@ -14,7 +14,7 @@
   - [x] LP (Life Points) Management Methods
   - [x] Deck Management Methods
   - [x] CP (Crystal Points) Management Methods
-  - [ ] Stealing CP from another player
+  - [ ] Stealing CP from another player (needed for some Specials)
 - [ ] Cards
   - [x] Images
   - [ ] All cards available
@@ -38,14 +38,15 @@
     - [x] Player's names and LP
     - [x] Player's CP
     - [x] Player's Effects
-    - [ ] 15 seconds to choose a card and Priority Management
+    - [x] 15 seconds to choose a card
     - [ ] Combat Phase
         - [x] LP Management
         - [x] CP Management
         - [x] Hand Management
-        - [ ] Priority 
+        - [x] Priority Management
         - [x] Effects Management
         - [ ] Specials
         - [ ] Little Animation
+    - [ ] End of the game
 - [ ] Network Play
     - [x] Local Network Play

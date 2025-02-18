@@ -11,4 +11,7 @@ void receiveIds(sf::TcpSocket &socket, std::vector<int>& ids, int size);
 void sendId(sf::TcpSocket &socket, int& id);
 void receiveId(sf::TcpSocket &socket, int& id);
 
+void sendBool(sf::TcpSocket &socket, bool& b);
+void receiveBool(sf::TcpSocket &socket, bool& b);
+
 #endif
