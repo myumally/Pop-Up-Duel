@@ -183,6 +183,7 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   bool RUN = true;
   bool RUN_SELECTION_PHASE = true;
   bool RUN_COMBAT_PHASE = false;
+  bool RUN_END_PHASE = false;
 
   sf::Clock clock;
   const float timeLimit = 15.0f;
@@ -249,7 +250,21 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 
   sf::ConvexShape RedCrystal;
   createCrystalShape(RedCrystal, Up, Right, Down, Left);
-  RedCrystal.setFillColor(sf::Color::Red);
+  RedCrystal.setFillColor(sf::Color::Red); 
+
+  sf::Text QuitText("Quit", font, 50); 
+  QuitText.setFillColor(sf::Color(100, 100, 0));
+  QuitText.setPosition((window.getSize().x - QuitText.getGlobalBounds().width)/2, (window.getSize().y - QuitText.getGlobalBounds().height)/2);
+
+  sf::RectangleShape Quit;
+  Quit.setSize(sf::Vector2f(0.f, 0.f));
+  Quit.setFillColor(sf::Color(255, 255, 155));
+  Quit.setPosition((window.getSize().x - QuitText.getGlobalBounds().width)/2, (window.getSize().y - QuitText.getGlobalBounds().height)/2);
+
+  sf::Text WinText("It's a Win !", font, 50);
+  sf::Text LoseText("Is that Skill Issue ? You Lost ...", font, 50);
+  WinText.setPosition((window.getSize().x - WinText.getGlobalBounds().width)/2, (window.getSize().y - WinText.getGlobalBounds().height - 40.f)/2 - QuitText.getGlobalBounds().height - 20.f);
+  LoseText.setPosition((window.getSize().x - LoseText.getGlobalBounds().width)/2, (window.getSize().y - LoseText.getGlobalBounds().height - 40.f)/2 - QuitText.getGlobalBounds().height - 20.f);
 
 
   std::list<Card*> listDeck1 = player1->getDeck();
@@ -570,8 +585,12 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 */ 
 
       RUN_COMBAT_PHASE = false;
-      RUN_SELECTION_PHASE = true;
-
+      if((player1->getLP() != 0) && (player2->getLP() != 0)){
+        RUN_SELECTION_PHASE = true;
+      }
+      else{
+        RUN_END_PHASE = true;
+      }
 
       // render
 
@@ -596,6 +615,63 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 
       window.display();
       sf::sleep(sf::seconds(3));
+    }
+
+    while(window.isOpen() && RUN_END_PHASE){
+
+      mouse_state = 0;
+
+      while (window.pollEvent(event))
+      {
+        // check the type of the event...
+        switch (event.type)
+        {
+          // window closed
+          case sf::Event::Closed:
+            window.close();
+            break;
+
+          case sf::Event::MouseButtonPressed:
+            x = event.mouseButton.x;
+            y = event.mouseButton.y;
+            mouse_state = 1;          
+            break;
+
+          case sf::Event::MouseMoved:
+            x = event.mouseMove.x;
+            y = event.mouseMove.y;          
+            break;
+
+          default:
+            break;
+        }
+      }
+
+      // update
+
+    if (mouse_state == 1){
+      if (Quit.getGlobalBounds().contains(x, y)){
+        RUN = false;
+        RUN_END_PHASE = false;
+      }
+    }
+
+      // render
+
+      window.clear();
+
+      if (player1->getLP() == 0){
+        window.draw(LoseText);
+      }
+      else {
+        window.draw(WinText);
+      }
+
+      Quit.setSize(sf::Vector2f(QuitText.getGlobalBounds().width + 20.f, QuitText.getGlobalBounds().height + 20.f));
+      window.draw(Quit);
+      window.draw(QuitText);
+
+      window.display();
     }
   }
 

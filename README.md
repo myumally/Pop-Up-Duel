@@ -47,6 +47,6 @@
         - [x] Effects Management
         - [ ] Specials
         - [ ] Little Animation
-    - [ ] End of the game
+    - [x] End of the game
 - [ ] Network Play
     - [x] Local Network Play
