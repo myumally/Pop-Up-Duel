@@ -219,10 +219,11 @@ int main(int argc, char **argv) {
     else{
       std::cout << "Enter host IP " << "...\n";
       std::cin >> hostIP;
-      if (socket.connect(hostIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
+      WaitingScreen(window, font, "Waiting for host to connect");
+      while (!(socket.connect(hostIP, PORT, sf::seconds(2)) == sf::Socket::Done)) {
         isHost = false;
-        std::cout << "Connected to host at " << hostIP << "!\n";
       }
+      std::cout << "Connected to host at " << hostIP << "!\n";
     }
 
 
