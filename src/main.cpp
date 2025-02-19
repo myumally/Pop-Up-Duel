@@ -182,7 +182,7 @@ void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Ca
 }
 
 
-int main(int, char**) {
+int main(int argc, char **argv) {
 
   // Get Screen Dimension
   sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -199,7 +199,34 @@ int main(int, char**) {
 
   // Get Local IP Adress
   sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
+  sf::IpAddress hostIP;
 
+    if(argc == 2 && std::string(argv[1]) == "host"){
+      isHost = true;
+      std::cout << "Starting as host, IP : " << localIP << "...\n";
+
+      if (listener.listen(PORT) != sf::Socket::Done) {
+        std::cerr << "Error: Could not start listening on port " << PORT << "\n";
+        return -1;
+      }
+
+      WaitingScreen(window, font, "Waiting for opponent to connect");
+      while (listener.accept(socket) != sf::Socket::Done) {
+        sf::sleep(sf::seconds(1));
+      }
+      std::cout << "Opponent connected!\n";
+    }
+    else{
+      std::cout << "Enter host IP " << "...\n";
+      std::cin >> hostIP;
+      if (socket.connect(hostIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
+        isHost = false;
+        std::cout << "Connected to host at " << hostIP << "!\n";
+      }
+    }
+
+
+/*
   // Connection
   std::cout << "Trying to connect to an existing host at " << localIP << "...\n";
   if (socket.connect(localIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
@@ -221,6 +248,7 @@ int main(int, char**) {
     std::cout << "Opponent connected!\n";
 
   }
+*/
 
   connected = true; 
 
