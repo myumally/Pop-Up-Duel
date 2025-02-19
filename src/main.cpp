@@ -216,6 +216,14 @@ int main(int argc, char **argv) {
       }
       std::cout << "Opponent connected!\n";
     }
+    else if (argc == 2) {
+      hostIP = std::string(argv[1]); 
+      WaitingScreen(window, font, "Waiting for host to connect");
+      while (!(socket.connect(hostIP, PORT, sf::seconds(2)) == sf::Socket::Done)) {
+        isHost = false;
+      }
+      std::cout << "Connected to host at " << hostIP << "!\n"; 
+    }
     else{
       std::cout << "Enter host IP " << "...\n";
       std::cin >> hostIP;
