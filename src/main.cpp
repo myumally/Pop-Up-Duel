@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
   // Get Local IP Adress
   sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
   sf::IpAddress hostIP;
-
+/*
     if(argc == 2 && std::string(argv[1]) == "host"){
       isHost = true;
       std::cout << "Starting as host, IP : " << localIP << "...\n";
@@ -233,17 +233,20 @@ int main(int argc, char **argv) {
       }
       std::cout << "Connected to host at " << hostIP << "!\n";
     }
+*/
 
-
-/*
+//*
   // Connection
-  std::cout << "Trying to connect to an existing host at " << localIP << "...\n";
-  if (socket.connect(localIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
+  if (argc == 2)
+      hostIP = std::string(argv[1]);
+  std::cout << "Trying to connect to an existing host at " << hostIP << "...\n";
+  if (socket.connect(hostIP, PORT, sf::seconds(2)) == sf::Socket::Done) {
     isHost = false;
-    std::cout << "Connected to host at " << localIP << "!\n";
+    std::cout << "Connected to host at " << hostIP << "!\n";
   } else {
     isHost = true;
     std::cout << "No host found. Starting as host...\n";
+    std::cout << "IP : " << localIP << "!\n";
 
     if (listener.listen(PORT) != sf::Socket::Done) {
       std::cerr << "Error: Could not start listening on port " << PORT << "\n";
@@ -257,7 +260,7 @@ int main(int argc, char **argv) {
     std::cout << "Opponent connected!\n";
 
   }
-*/
+//*/
 
   connected = true; 
 
