@@ -5,26 +5,12 @@
 #include <list>
 #include <array>
 #include <iostream>
+#include "enum.hpp"
 
-enum ZoneType {Blank, Sword, Shield};
-
-enum Colour {Grey, Red, Green, Blue, Yellow};
-
-enum Effect {Nothing, Burn, Freeze, Numb, Poison, Silence, Protect, Refresh, Haste, Slow};
-
-enum Special {
-  Crystal_Ability,
-  Rebound,
-  Color_Boost,
-  Zone_Boost,
-  CP_Boost,
-  CP_Crush,
-  CP_Drain,
-  Risky_Move,
-  Recover
-};
+#include "Special.hpp"
 
 // To-Do : gérer les spéciaux
+// To-Do : Crystal Ability
 
 class Card{
 
@@ -45,6 +31,8 @@ class Card{
 
   Effect effect = Nothing;
   int strength;
+
+  ISpecial* special;
 
   public :
 
