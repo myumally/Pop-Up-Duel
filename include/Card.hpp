@@ -82,6 +82,9 @@ class Card{
   int getStrength() const;
   void setStrength(int newStrength);
 
+  ISpecial* getSpecial() const;
+  void setSpecial(ISpecial*  newSpecial);
+
   void toStream(std::ostream& os = std::cout) const;
 
 };

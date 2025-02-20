@@ -67,7 +67,7 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour swor
   effect = e;
   strength = s;
 
-  special = new NothingSpecial();
+  special = new NothingSpecial(this);
 }
 
 Card::Card(Card& c){
@@ -230,6 +230,13 @@ int Card::getStrength() const {
 }
 void Card::setStrength(int newStrength) {
   strength = newStrength;
+}
+
+ISpecial* Card::getSpecial() const{
+  return special;
+}
+void Card::setSpecial(ISpecial*  newSpecial){
+  special = newSpecial;
 }
 
 void Card::toStream(std::ostream& os) const{
