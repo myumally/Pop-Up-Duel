@@ -8,7 +8,9 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <memory>
 
+#include "enum.hpp"
 #include "All_Cards.hpp"
 #include "Card.hpp"
 #include "Player.hpp"
