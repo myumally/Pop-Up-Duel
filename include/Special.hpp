@@ -23,7 +23,7 @@ class Rebound : public ISpecial{
     int b;
 
   public:
-    Rebound(int NbLP, int A, int B);
+    Rebound(int NbLP, int A, int B, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -34,7 +34,7 @@ class Color_Boost : public ISpecial{
     int a;
     int b;
   public:
-    Color_Boost(Colour Col, int A, int B);
+    Color_Boost(Colour Col, int A, int B, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -44,7 +44,7 @@ class Zone_Boost : public ISpecial{
     int a;
     ZoneType zone;
   public:
-    Zone_Boost(int A, ZoneType Zone);
+    Zone_Boost(int A, ZoneType Zone, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -55,7 +55,7 @@ class CP_Boost : public ISpecial{
     Colour CPColour;
     PlayerType CPOwner;
   public:
-    CP_Boost(int NbCP, Colour Col, PlayerType Ow);
+    CP_Boost(int NbCP, Colour Col, PlayerType Ow, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -65,7 +65,7 @@ class CP_Crush : public ISpecial{
     int nbCP;
     std::list<Colour> CPColours;
   public:
-    CP_Crush( int NbCP, std::list<Colour> Cols);
+    CP_Crush( int NbCP, std::list<Colour> Cols, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -75,7 +75,7 @@ class CP_Drain : public ISpecial{
     int nbCP;
     Colour CPColour;
   public:
-    CP_Drain(int NbCP, Colour Col);
+    CP_Drain(int NbCP, Colour Col, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -85,7 +85,7 @@ class Risky_Move : public ISpecial{
     int a;
     Colour CPColour;
   public:
-    Risky_Move(int A, Colour Col);
+    Risky_Move(int A, Colour Col, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
@@ -97,13 +97,13 @@ class Recover : public ISpecial{
     Colour CPColour;
     PlayerType CPOwner;
   public:
-    Recover(int A, int B, Colour Col, PlayerType Ow);
+    Recover(int A, int B, Colour Col, PlayerType Ow, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
 class NothingSpecial : public ISpecial{
   public:
-    NothingSpecial();
+    NothingSpecial(Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 

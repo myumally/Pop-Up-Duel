@@ -1,53 +1,61 @@
 #include "../include/Special.hpp"
 #include "../include/all_includes.hpp"
 
-Rebound::Rebound(int NbLP, int A, int B){
+Rebound::Rebound(int NbLP, int A, int B, Card* Card){
   nbLP = NbLP;
   a = A;
   b = B;
+  card = Card;
 }
 
-Color_Boost::Color_Boost(Colour Col, int A, int B){
+Color_Boost::Color_Boost(Colour Col, int A, int B, Card* Card){
   col = Col;
   a = A;
   b = B;
+  card = Card;
 }
 
-Zone_Boost::Zone_Boost(int A, ZoneType Zone){
+Zone_Boost::Zone_Boost(int A, ZoneType Zone, Card* Card){
   a = A;
   zone = Zone;
+  card = Card;
 }
 
-CP_Boost::CP_Boost(int NbCP, Colour Col, PlayerType Ow){
+CP_Boost::CP_Boost(int NbCP, Colour Col, PlayerType Ow, Card* Card){
   nbCP = NbCP;
   CPColour = Col;
   CPOwner = Ow;
+  card = Card;
 }
 
-CP_Crush::CP_Crush( int NbCP, std::list<Colour> Cols){
+CP_Crush::CP_Crush( int NbCP, std::list<Colour> Cols, Card* Card){
   nbCP = NbCP;
   CPColours = Cols;
+  card = Card;
 }
 
-CP_Drain::CP_Drain(int NbCP, Colour Col){
+CP_Drain::CP_Drain(int NbCP, Colour Col, Card* Card){
   nbCP = NbCP;
   CPColour = Col;
+  card = Card;
 }
 
-Risky_Move::Risky_Move(int A, Colour Col){
+Risky_Move::Risky_Move(int A, Colour Col, Card* Card){
   a = A;
   CPColour = Col;
+  card = Card;
 }
 
-Recover::Recover(int A, int B, Colour Col, PlayerType Ow){
+Recover::Recover(int A, int B, Colour Col, PlayerType Ow, Card* Card){
   a = A;
   b = B;
   CPColour = Col;
   CPOwner = Ow;
+  card = Card;
 }
 
-NothingSpecial::NothingSpecial(){
-
+NothingSpecial::NothingSpecial(Card* Card){
+  card = Card;
 }
 
 int Rebound::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
@@ -107,8 +115,8 @@ int CP_Drain::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   if(CPColour == Grey)
     col = p2->getMostAbundantCP();
   for(int i = 0; i<nbCP; ++i){
-      p2->removeCP(col);
-      p1->addCP(col);
+    p2->removeCP(col);
+    p1->addCP(col);
   }
   return card->getStrength();
 }
