@@ -222,6 +222,7 @@ TEST_CASE("CP Management 4") {
     p1.setAllCP(Blue);
     CHECK( 8 ==  p1.getNumberOfCP(Blue));
     CHECK( 8 == p1.getNumberOfMostAbundantCP());
+    CHECK( Blue == p1.getMostAbundantCP());
 
     p1.removeAllCP();
     CHECK( 0 == p1.getNumberOfMostAbundantCP());

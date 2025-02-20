@@ -211,3 +211,12 @@ int Player::getNumberOfMostAbundantCP() const{
   return *std::max_element(colours.begin(), colours.end());
 }
 
+Colour Player::getMostAbundantCP() const{
+  std::array<int, 4> colours = {0};
+  for(int i = 1; i < 5; i++){
+    colours[i-1] = getNumberOfCP(static_cast<Colour>(i));
+  }
+
+  return static_cast<Colour>(std::distance(colours.begin(), std::max_element(colours.begin(), colours.end())) + 1);
+}
+
