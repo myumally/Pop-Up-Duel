@@ -46,6 +46,10 @@ Recover::Recover(int A, int B, Colour Col, PlayerType Ow){
   CPOwner = Ow;
 }
 
+NothingSpecial::NothingSpecial(){
+
+}
+
 int Rebound::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   int LP = nbLP;
   if(nbLP == -1)

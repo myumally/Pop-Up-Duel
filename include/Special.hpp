@@ -103,6 +103,7 @@ class Recover : public ISpecial{
 
 class NothingSpecial : public ISpecial{
   public:
+    NothingSpecial();
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 

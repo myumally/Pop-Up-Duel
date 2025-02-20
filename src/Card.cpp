@@ -66,6 +66,8 @@ Card::Card(int n, std::string monster, std::string attack, Colour c, Colour swor
 
   effect = e;
   strength = s;
+
+  special = new NothingSpecial();
 }
 
 Card::Card(Card& c){
