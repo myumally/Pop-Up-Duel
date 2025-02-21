@@ -54,28 +54,36 @@ void AffectNewEffect(Player* p1, Card* c1, Player* p2){
   }
 }
 
-void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, int AttackPower1, int AttackPower2){
+void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2){
   Colour FocusZone;
+  int AttackPower1 = c1->getStrength();
+  int AttackPower2 = c2->getStrength();
   if(c1->hasSwordAttack()){
     FocusZone = c1->getSwordZone();
     switch (c2->getZones()[FocusZone - 1]) {
       case Blank:
         AffectNewEffect(p1, c1, p2);
-        if(p2->isAffectedBySelfEffect() == Refresh) p2->loseLP(c1->getStrength()); 
-        else p2->loseLP(AttackPower1); 
+        AttackPower1 = c1->getSpecial()->operator()(p1, p2, c2);
+        if(!(p2->isAffectedBySelfEffect() == Refresh)) 
+          AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
+        p2->loseLP(AttackPower1);
         break;
 
       case Sword:
         AffectNewEffect(p1, c1, p2);
-        if(p2->isAffectedBySelfEffect() == Refresh) p2->loseLP(c1->getStrength()/2);
-        else p2->loseLP(AttackPower1/2); 
+        AttackPower1 = c1->getSpecial()->operator()(p1, p2, c2);
+        if(!(p2->isAffectedBySelfEffect() == Refresh)) 
+          AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
+        p2->loseLP(AttackPower1/2); 
         break;
 
       case Shield:
         if(!c2->hasSwordAttack()){
           AffectNewEffect(p2, c2, p1);
-          if(p1->isAffectedBySelfEffect() == Refresh) p1->loseLP(c2->getStrength());
-          else p1->loseLP(AttackPower2);
+          AttackPower2 = c2->getSpecial()->operator()(p2, p1, c1);
+          if(!(p1->isAffectedBySelfEffect() == Refresh)) 
+            AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower1);
+          p1->loseLP(AttackPower2);
         }
         break;
 
@@ -88,7 +96,7 @@ void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, int AttackPower1, i
   if(c1->getColour() != Grey){
     p1->addCP(c1->getColour());
   }
-}
+} 
 
 void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
 
@@ -98,24 +106,18 @@ void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
   Effect OldSelfEffect2 = p2->isAffectedBySelfEffect();
   Effect OldOpponentEffect2 = p2->isAffectedByOpponentEffect();
 
-  int AttackPower1 = c1->getStrength();
-  int AttackPower2 = c2->getStrength();
-
-  AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
-  AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower2);
-
   PriorityManagement(p1, p2);
 
   p1->setAffectedBy(Nothing);
   p2->setAffectedBy(Nothing);
 
   if(p1->hasPriority()){
-    AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
-    AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
+    AttackPhase(p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2);
+    AttackPhase(p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
   }
   else {
-    AttackPhase(p2, c2, p1, c1, AttackPower2, AttackPower1);
-    AttackPhase(p1, c1, p2, c2, AttackPower1, AttackPower2);
+    AttackPhase(p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
+    AttackPhase(p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2);
   }
 
   p1->setPriority(false);
@@ -292,7 +294,7 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   sendIds(socket, PlayerOneHand, 3);
   receiveIds(socket, PlayerTwoHand, 3);
 
-/*
+  /*
      for(int i = 0; i < 3; i++){
      Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
      while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
@@ -300,7 +302,7 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
      }
      PlayerTwoHand.push_back(Drawed_Id);
      }
-*/
+     */
 
 
   int cardCount = 0;
@@ -574,15 +576,15 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
       sendIds(socket, PlayerOneHand, 3);
       receiveIds(socket, PlayerTwoHand, 3);
 
-/*
-      Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
-      while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
-        Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
-      }
-      PlayerTwoHand.push_back(Drawed_Id);
-      
-      PlayerTwoHand.erase(std::remove(PlayerTwoHand.begin(), PlayerTwoHand.end(), PlayerTwoSelectedCard), PlayerTwoHand.end()); 
-*/ 
+      /*
+         Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+         while(std::find(PlayerTwoHand.begin(), PlayerTwoHand.end(), Drawed_Id) != PlayerTwoHand.end()){
+         Drawed_Id = vectDeck2[getRandomInt(rng)]->getId();
+         }
+         PlayerTwoHand.push_back(Drawed_Id);
+
+         PlayerTwoHand.erase(std::remove(PlayerTwoHand.begin(), PlayerTwoHand.end(), PlayerTwoSelectedCard), PlayerTwoHand.end()); 
+         */ 
 
       RUN_COMBAT_PHASE = false;
       if((player1->getLP() != 0) && (player2->getLP() != 0)){
@@ -649,12 +651,12 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
 
       // update
 
-    if (mouse_state == 1){
-      if (Quit.getGlobalBounds().contains(x, y)){
-        RUN = false;
-        RUN_END_PHASE = false;
+      if (mouse_state == 1){
+        if (Quit.getGlobalBounds().contains(x, y)){
+          RUN = false;
+          RUN_END_PHASE = false;
+        }
       }
-    }
 
       // render
 
