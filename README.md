@@ -11,19 +11,15 @@
 
 Clone the repo then launch with :
 ```
-{
 git clone https://github.com/myumally/Pop-Up-Duel.git
 cd  Pop-Up-Duel
 make 
 ./pop <adress IP of your Opponent>
-}
 ```
 
 If needed install the SFML library with :
 ```
-{
 sudo apt-get install libsfml-dev
-}
 ```
 
 ### To-Do List
