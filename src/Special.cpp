@@ -85,13 +85,16 @@ int CP_Boost::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   Colour col = CPColour;
   if (CPColour == Grey)
     col = OpponentCard->getColour();
-  if (CPOwner == Opponent){
-    for (int i = 0; i<nbCP; ++i)
-      p2->addCP(CPColour);
+
+  if (CPOwner == NotOpponent){
+    if(nbCP == MAX_CP)
+      p1->setAllCP(col);
+    else 
+      for (int i = 0; i<nbCP; ++i)
+        p1->addCP(col);
   }
   else{
-    for (int i = 0; i<nbCP; ++i)
-      p1->addCP(CPColour);
+    p2->setAllCP(col);
   }
   return card->getStrength();
 }

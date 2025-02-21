@@ -359,7 +359,7 @@ TEST_CASE("All Cards 2") {
     CHECK(Burn == AllCards[118]->getEffect());
 }
 
-TEST_CASE("All Cards 3: Rebound"){
+TEST_CASE("All Cards x Specials 1: Rebound"){
     Player* p1 = new Player("p1");
     Player* p2 = new Player("p2");
     std::array<Card*, 122> AllCards = Cards_Creation();
@@ -371,7 +371,45 @@ TEST_CASE("All Cards 3: Rebound"){
     CHECK(12 == p2->getLP());
 }
 
-TEST_CASE("All Cards 4: CP_Crush"){
+TEST_CASE("All Cards x Specials 2: Color_Boost"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[2]->getSpecial()->operator()(p1, p2, AllCards[36]));
+    CHECK(17 == p2->getLP());
+}
+
+TEST_CASE("All Cards x Specials 3: Zone_Boost"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[18]->getSpecial()->operator()(p1, p2, AllCards[33]));
+    CHECK(14 == p2->getLP());
+}
+
+TEST_CASE("All Cards x Specials 4: CP_Boost"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(0 == p1->getNumberOfMostAbundantCP());
+    CHECK(0 == p2->getNumberOfMostAbundantCP());
+    for(int i = 0; i < 5; ++i){
+      p1->addCP(Red);
+      p2->addCP(Red);
+    }
+    CHECK(5 == p1->getNumberOfCP(Red));
+    CHECK(5 == p2->getNumberOfCP(Red));
+    p2->loseLP(AllCards[22]->getSpecial()->operator()(p1, p2, AllCards[11]));
+    CHECK(8 == p1->getNumberOfCP(Red));
+    CHECK(5 == p2->getNumberOfCP(Red));
+    p2->loseLP(AllCards[57]->getSpecial()->operator()(p1, p2, AllCards[11]));
+    CHECK(8 == p1->getNumberOfCP(Red));
+    CHECK(5 == p2->getNumberOfCP(Blue));
+}
+
+TEST_CASE("All Cards x Specials 5: CP_Crush"){
     Player* p1 = new Player("p1");
     Player* p2 = new Player("p2");
     std::array<Card*, 122> AllCards = Cards_Creation();
