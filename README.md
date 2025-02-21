@@ -1,5 +1,31 @@
 # Pop-Up-Duel
 
+### Requirements
+
+- git
+- g++
+- make
+- SFML library
+
+### How to install
+
+Clone the repo then launch with :
+```
+{
+git clone https://github.com/myumally/Pop-Up-Duel.git
+cd  Pop-Up-Duel
+make 
+./pop <adress IP of your Opponent>
+}
+```
+
+If needed install the SFML library with :
+```
+{
+sudo apt-get install libsfml-dev
+}
+```
+
 ### To-Do List
 
 - [x] Makefile
@@ -26,8 +52,9 @@
     - [x] Sword Zones 
     - [x] Guard Zones
     - [x] Effects
-    - [ ] Strength
+    - [x] Strength
     - [x] Specials
+    - [ ] Crystal Ability
 - [ ] User Interface
   - [x] Choosing what to use for graphics -> **SFML**
   - [x] Deck Creation Menu
@@ -46,7 +73,8 @@
         - [x] Hand Management
         - [x] Priority Management
         - [x] Effects Management
-        - [ ] Specials
+        - [x] Specials
+        - [ ] Crystal Ability
         - [ ] Little Animation
     - [x] End of the game
 - [ ] Network Play
