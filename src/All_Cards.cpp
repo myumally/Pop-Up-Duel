@@ -246,7 +246,7 @@ std::array<Card*, 122> Cards_Creation(){
   std::array<Card*, 122> ALL_CARDS;
 
   for(int i = 0; i < 122; i++){
-    ALL_CARDS[i] = new Card (i+1, "monster", AttackNames[i], Grey, Grey, {}, Nothing, 1); 
+    ALL_CARDS[i] = new Card (i+1, "monster", AttackNames[i], Grey, Grey, {}, Nothing, Strength[i]); 
   }
 
 
