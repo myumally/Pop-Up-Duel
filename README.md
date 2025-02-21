@@ -25,12 +25,12 @@ sudo apt-get install libsfml-dev
 ### To-Do List
 
 - [x] Makefile
-- [ ] Card Class
+- [x] Card Class
   - [x] Constructor
   - [x] Getters and Setters
   - [x] ZoneTypes and Colours
   - [x] Specials Management
-  - [ ] Crystal Ability
+  - [x] Crystal Ability
 - [x] Player Class
   - [x] Constructor
   - [x] Getters and Setters
@@ -38,6 +38,10 @@ sudo apt-get install libsfml-dev
   - [x] Deck Management Methods
   - [x] CP (Crystal Points) Management Methods
   - [x] Stealing CP from another player (needed for some Specials)
+- [ ] Specials Class
+    - [x] Specials
+    - [x] Crystal Ability
+    - [ ] Tricky Attacks
 - [ ] Cards
   - [x] Images
   - [ ] All cards available
@@ -50,7 +54,8 @@ sudo apt-get install libsfml-dev
     - [x] Effects
     - [x] Strength
     - [x] Specials
-    - [ ] Crystal Ability
+    - [x] Crystal Ability
+    - [ ] Tricky Attacks
 - [ ] User Interface
   - [x] Choosing what to use for graphics -> **SFML**
   - [x] Deck Creation Menu
@@ -70,8 +75,8 @@ sudo apt-get install libsfml-dev
         - [x] Priority Management
         - [x] Effects Management
         - [x] Specials
-        - [ ] Crystal Ability
+        - [x] Crystal Ability
         - [ ] Little Animation
     - [x] End of the game
-- [ ] Network Play
+- [x] Network Play
     - [x] Local Network Play
