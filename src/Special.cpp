@@ -59,6 +59,13 @@ NothingSpecial::NothingSpecial(Card* Card){
   card = Card;
 }
 
+CrystalAbility::CrystalAbility(std::array<int, 4> cps, ISpecial* spec, Card* Card){
+  CPs = cps;
+  Special = spec;
+  card = Card;
+}
+
+
 int Rebound::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   int LP = nbLP;
   if(nbLP == -1)
@@ -162,4 +169,13 @@ int Recover::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
 
 int NothingSpecial::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   return card->getStrength();
+}
+
+int CrystalAbility::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
+  for(int i = 0; i < 4; ++i){
+    if(p1->getNumberOfCP(static_cast<Colour>(i + 1)) < CPs[i]){
+      return 0;
+    }
+  }
+  return Special->operator()(p1, p2, OpponentCard);
 }

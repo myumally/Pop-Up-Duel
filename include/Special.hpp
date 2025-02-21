@@ -2,7 +2,7 @@
 #define special__hpp
 
 #include "enum.hpp"
-#include <list>
+#include <array>
 
 class Card;
 class Player;
@@ -105,6 +105,15 @@ class Recover : public ISpecial{
 class NothingSpecial : public ISpecial{
   public:
     NothingSpecial(Card* Card);
+    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
+};
+
+class CrystalAbility: public ISpecial{
+  private:
+    std::array<int, 4> CPs;
+    ISpecial* Special;
+  public:
+    CrystalAbility(std::array<int, 4> cps, ISpecial* spec, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
