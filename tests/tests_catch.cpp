@@ -377,8 +377,7 @@ TEST_CASE("All Cards x Specials 2: Color_Boost"){
     std::array<Card*, 122> AllCards = Cards_Creation();
     CHECK(20 == p2->getLP());
     p2->loseLP(AllCards[2]->getSpecial()->operator()(p1, p2, AllCards[36]));
-    CHECK(17 == p2->getLP());
-    std::cout << AllCards[51]->getStrength(); 
+    CHECK(17 == p2->getLP()); 
     p2->loseLP(AllCards[51]->getSpecial()->operator()(p1, p2, AllCards[121]));
     CHECK(17 == p2->getLP());
     p2->loseLP(AllCards[51]->getSpecial()->operator()(p1, p2, AllCards[0]));
