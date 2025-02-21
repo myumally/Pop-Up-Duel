@@ -82,7 +82,7 @@ void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffec
           AffectNewEffect(p2, c2, p1);
           AttackPower2 = c2->getSpecial()->operator()(p2, p1, c1);
           if(!(p1->isAffectedBySelfEffect() == Refresh)) 
-            AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower1);
+            AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower2);
           p1->loseLP(AttackPower2);
         }
         break;
