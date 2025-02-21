@@ -7,14 +7,15 @@
   - [x] Constructor
   - [x] Getters and Setters
   - [x] ZoneTypes and Colours
-  - [ ] Specials Management
-- [ ] Player Class
+  - [x] Specials Management
+  - [ ] Crystal Ability
+- [x] Player Class
   - [x] Constructor
   - [x] Getters and Setters
   - [x] LP (Life Points) Management Methods
   - [x] Deck Management Methods
   - [x] CP (Crystal Points) Management Methods
-  - [ ] Stealing CP from another player (needed for some Specials)
+  - [x] Stealing CP from another player (needed for some Specials)
 - [ ] Cards
   - [x] Images
   - [ ] All cards available
@@ -26,7 +27,7 @@
     - [x] Guard Zones
     - [x] Effects
     - [ ] Strength
-    - [ ] Specials
+    - [x] Specials
 - [ ] User Interface
   - [x] Choosing what to use for graphics -> **SFML**
   - [x] Deck Creation Menu

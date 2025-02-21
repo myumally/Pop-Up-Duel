@@ -298,6 +298,77 @@ std::array<Card*, 122> Cards_Creation(){
     }
   }
 
+  // Rebound
+  ALL_CARDS[1]->setSpecial(new Rebound(5, 2, 0, ALL_CARDS[1]));
+  ALL_CARDS[94]->setSpecial(new Rebound(-1, 2, 0, ALL_CARDS[94]));
+  ALL_CARDS[95]->setSpecial(new Rebound(5, 2, 0, ALL_CARDS[95]));
+  ALL_CARDS[111]->setSpecial(new Rebound(7, 0, 7, ALL_CARDS[111]));
+  ALL_CARDS[112]->setSpecial(new Rebound(3, 0, 10, ALL_CARDS[112]));
+
+  // Color_Boost
+  ALL_CARDS[2]->setSpecial(new Color_Boost(Green, 0, 3, ALL_CARDS[2]));
+  ALL_CARDS[25]->setSpecial(new Color_Boost(Grey, 0, 4, ALL_CARDS[25]));
+  ALL_CARDS[42]->setSpecial(new Color_Boost(Green, 2, 0, ALL_CARDS[42]));
+  ALL_CARDS[51]->setSpecial(new Color_Boost(Red, 0, 4, ALL_CARDS[51]));
+  ALL_CARDS[79]->setSpecial(new Color_Boost(Blue, 2, 0, ALL_CARDS[79]));
+  ALL_CARDS[86]->setSpecial(new Color_Boost(Grey, 2, 0, ALL_CARDS[86]));
+  ALL_CARDS[92]->setSpecial(new Color_Boost(Grey, 2, 0, ALL_CARDS[92]));
+
+  // Zone_Boost
+  ALL_CARDS[18]->setSpecial(new Zone_Boost(2, Shield, ALL_CARDS[18]));
+  ALL_CARDS[40]->setSpecial(new Zone_Boost(2, Blank, ALL_CARDS[40]));
+  ALL_CARDS[41]->setSpecial(new Zone_Boost(4, Shield, ALL_CARDS[41]));
+  ALL_CARDS[47]->setSpecial(new Zone_Boost(4, Blank, ALL_CARDS[47]));
+  ALL_CARDS[69]->setSpecial(new Zone_Boost(3, Shield, ALL_CARDS[69]));
+  ALL_CARDS[70]->setSpecial(new Zone_Boost(5, Shield, ALL_CARDS[70]));
+  ALL_CARDS[98]->setSpecial(new Zone_Boost(3, Shield, ALL_CARDS[98]));
+
+  // CP_Boost
+  ALL_CARDS[22]->setSpecial(new CP_Boost(3, Grey, NotOpponent, ALL_CARDS[22]));
+  ALL_CARDS[23]->setSpecial(new CP_Boost(MAX_CP, Red, NotOpponent, ALL_CARDS[23]));
+  ALL_CARDS[38]->setSpecial(new CP_Boost(MAX_CP, Green, NotOpponent, ALL_CARDS[38]));
+  ALL_CARDS[39]->setSpecial(new CP_Boost(MAX_CP, Green, Opponent, ALL_CARDS[39]));
+  ALL_CARDS[56]->setSpecial(new CP_Boost(MAX_CP, Blue, NotOpponent, ALL_CARDS[56]));
+  ALL_CARDS[57]->setSpecial(new CP_Boost(MAX_CP, Blue, Opponent, ALL_CARDS[57]));
+  ALL_CARDS[81]->setSpecial(new CP_Boost(MAX_CP, Yellow, NotOpponent, ALL_CARDS[81]));
+
+  // CP_Crush
+  ALL_CARDS[3]->setSpecial(new CP_Crush(3, Green, No, ALL_CARDS[3]));
+  ALL_CARDS[10]->setSpecial(new CP_Crush(MAX_CP, Red, No, ALL_CARDS[10]));
+  ALL_CARDS[11]->setSpecial(new CP_Crush(MAX_CP, Grey, All, ALL_CARDS[11]));
+  ALL_CARDS[12]->setSpecial(new CP_Crush(2, Grey, OppCard, ALL_CARDS[12]));
+  ALL_CARDS[17]->setSpecial(new CP_Crush(5, Grey, OppCard, ALL_CARDS[17]));
+  ALL_CARDS[31]->setSpecial(new CP_Crush(2, Blue, No, ALL_CARDS[31]));
+  ALL_CARDS[43]->setSpecial(new CP_Crush(2, Green, No, ALL_CARDS[43]));
+  ALL_CARDS[49]->setSpecial(new CP_Crush(3, Red, No, ALL_CARDS[49]));
+  ALL_CARDS[50]->setSpecial(new CP_Crush(MAX_CP, Red, No, ALL_CARDS[50]));
+  ALL_CARDS[55]->setSpecial(new CP_Crush(2, Grey, OppCard, ALL_CARDS[55]));
+  ALL_CARDS[66]->setSpecial(new CP_Crush(2, Green, No, ALL_CARDS[66]));
+  ALL_CARDS[68]->setSpecial(new CP_Crush(MAX_CP, Grey, MostAbundant, ALL_CARDS[68]));
+  ALL_CARDS[77]->setSpecial(new CP_Crush(MAX_CP, Grey, MostAbundant, ALL_CARDS[77]));
+  ALL_CARDS[87]->setSpecial(new CP_Crush(MAX_CP, Grey, MostAbundant, ALL_CARDS[87]));
+  ALL_CARDS[99]->setSpecial(new CP_Crush(MAX_CP, Grey, MostAbundant, ALL_CARDS[99]));
+
+  // CP_Drain
+  ALL_CARDS[16]->setSpecial(new CP_Drain(3, Red, ALL_CARDS[16]));
+  ALL_CARDS[54]->setSpecial(new CP_Drain(3, Blue, ALL_CARDS[54]));
+  ALL_CARDS[65]->setSpecial(new CP_Drain(2, Blue, ALL_CARDS[65]));
+  ALL_CARDS[67]->setSpecial(new CP_Drain(3, Blue, ALL_CARDS[67]));
+
+  // Risky_Move
+  ALL_CARDS[8]->setSpecial(new Risky_Move(2, Red, ALL_CARDS[8]));
+  ALL_CARDS[9]->setSpecial(new Risky_Move(3, Red, ALL_CARDS[9]));
+
+  // Recover
+  ALL_CARDS[14]->setSpecial(new Recover(0, 4, Grey, NotOpponent, ALL_CARDS[14]));
+  ALL_CARDS[20]->setSpecial(new Recover(2, 0, Red, NotOpponent, ALL_CARDS[20]));
+  ALL_CARDS[21]->setSpecial(new Recover(3, 0, Red, NotOpponent, ALL_CARDS[21]));
+  ALL_CARDS[33]->setSpecial(new Recover(2, 0, Yellow, Opponent, ALL_CARDS[33]));
+  ALL_CARDS[61]->setSpecial(new Recover(2, 0, Blue, NotOpponent, ALL_CARDS[61]));
+  ALL_CARDS[63]->setSpecial(new Recover(5, 0, Blue, NotOpponent, ALL_CARDS[63]));
+  ALL_CARDS[76]->setSpecial(new Recover(0, 10, Grey, NotOpponent, ALL_CARDS[76]));
+
+
   return ALL_CARDS;
 
 }

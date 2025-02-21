@@ -359,3 +359,30 @@ TEST_CASE("All Cards 2") {
     CHECK(Burn == AllCards[118]->getEffect());
 }
 
+TEST_CASE("All Cards 3: Rebound"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[111]->getSpecial()->operator()(p1, p2, AllCards[13]));
+    CHECK(19 == p2->getLP());
+    p1->loseLP(15);
+    p2->loseLP(AllCards[111]->getSpecial()->operator()(p1, p2, AllCards[13]));
+    CHECK(12 == p2->getLP());
+}
+
+TEST_CASE("All Cards 4: CP_Crush"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(0 == p2->getNumberOfMostAbundantCP());
+    for(int i = 0; i < MAX_CP/2; ++i){
+      p2->addCP(Red);
+      p2->addCP(Green);
+    }
+    CHECK(5 == p2->getNumberOfCP(Red));
+    CHECK(5 == p2->getNumberOfCP(Green));
+    p2->loseLP(AllCards[10]->getSpecial()->operator()(p1, p2, AllCards[11]));
+    CHECK(0 == p2->getNumberOfCP(Red));
+    CHECK(5 == p2->getNumberOfCP(Green));
+}
