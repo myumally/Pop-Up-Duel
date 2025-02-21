@@ -483,3 +483,49 @@ TEST_CASE("All Cards x Specials 8: Recover"){
     p2->loseLP(AllCards[20]->getSpecial()->operator()(p1, p2, AllCards[36]));
     CHECK(19 == p1->getLP());
 }
+
+TEST_CASE("All Cards x Specials 9: Life_Strike"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p1->getLP());
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[110]->getSpecial()->operator()(p1, p2, AllCards[36]));
+    CHECK(20 == p2->getLP());
+    for(int i = 0; i < 5; ++i){
+      p1->addCP(Red);
+      p1->addCP(Green);
+    }
+    p2->loseLP(AllCards[110]->getSpecial()->operator()(p1, p2, AllCards[36]));
+    CHECK(10 == p2->getLP());
+}
+
+TEST_CASE("All Cards x Specials 10: CP_Strike"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p1->getLP());
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[80]->getSpecial()->operator()(p1, p2, AllCards[36]));
+    CHECK(20 == p2->getLP());
+    for(int i = 0; i < 5; ++i){
+      p2->addCP(Blue);
+    }
+    p2->loseLP(AllCards[80]->getSpecial()->operator()(p1, p2, AllCards[36]));
+    CHECK(15 == p2->getLP());
+}
+
+TEST_CASE("All Cards x Specials 11: Reflect"){
+    Player* p1 = new Player("p1");
+    Player* p2 = new Player("p2");
+    std::array<Card*, 122> AllCards = Cards_Creation();
+    CHECK(20 == p1->getLP());
+    CHECK(20 == p2->getLP());
+    p2->loseLP(AllCards[74]->getSpecial()->operator()(p1, p2, AllCards[104]));
+    CHECK(20 == p2->getLP());
+    for(int i = 0; i < 2; ++i){
+      p1->addCP(Yellow);
+    }
+    p2->loseLP(AllCards[74]->getSpecial()->operator()(p1, p2, AllCards[104]));
+    CHECK(15 == p2->getLP());
+}

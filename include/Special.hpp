@@ -3,6 +3,7 @@
 
 #include "enum.hpp"
 #include <array>
+#include <list>
 
 class Card;
 class Player;
@@ -82,16 +83,6 @@ class CP_Drain : public ISpecial{
 };
 
 
-class Risky_Move : public ISpecial{
-  private:
-    int a;
-    Colour CPColour;
-  public:
-    Risky_Move(int A, Colour Col, Card* Card);
-    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
-};
-
-
 class Recover : public ISpecial{
   private:
     int a;
@@ -115,6 +106,43 @@ class CrystalAbility: public ISpecial{
     ISpecial* Special;
   public:
     CrystalAbility(std::array<int, 4> cps, ISpecial* spec);
+    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
+};
+
+class CP_Strike : public ISpecial{
+  private:
+    int a;
+    std::list<Colour> CPColours;
+    PlayerType CPOwner;
+  public:
+    CP_Strike(int A, std::list<Colour> Cols, PlayerType ow, Card* Card);
+    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
+};
+
+class Life_Strike : public ISpecial{
+  private:
+    int a;
+  public:
+    Life_Strike(int A, Card* Card);
+    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
+};
+
+class Risky_Move : public ISpecial{
+  private:
+    int a1;
+    int a2;
+    Colour CPColour1;
+    Colour CPColour2;
+  public:
+    Risky_Move(int A1, int A2, Colour Col1, Colour Col2, Card* Card);
+    int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
+};
+
+class Reflect : public ISpecial{
+  private:
+    int a;
+  public:
+    Reflect(int A, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 

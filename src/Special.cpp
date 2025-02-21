@@ -45,12 +45,6 @@ CP_Drain::CP_Drain(int NbCP, Colour Col, Card* Card){
   card = Card;
 }
 
-Risky_Move::Risky_Move(int A, Colour Col, Card* Card){
-  a = A;
-  CPColour = Col;
-  card = Card;
-}
-
 Recover::Recover(int A, int B, Colour Col, PlayerType Ow, Card* Card){
   a = A;
   b = B;
@@ -67,6 +61,31 @@ CrystalAbility::CrystalAbility(std::array<int, 4> cps, ISpecial* spec){
   CPs = cps;
   Special = spec;
   Special->getCard()->setCrystalAbility(true);
+}
+
+CP_Strike::CP_Strike(int A, std::list<Colour> Cols, PlayerType ow, Card* Card){
+  a = A;
+  CPColours = Cols;
+  CPOwner = ow;
+  card = Card;
+}
+
+Life_Strike::Life_Strike(int A, Card* Card){
+  a = A;
+  card = Card;
+}
+
+Risky_Move::Risky_Move(int A1, int A2, Colour Col1, Colour Col2, Card* Card){
+  a1 = A1;
+  a2 = A2;
+  CPColour1 = Col1;
+  CPColour2 = Col2;
+  card = Card;
+}
+
+Reflect::Reflect(int A, Card* Card){
+  a = A;
+  card = Card;
 }
 
 
@@ -156,13 +175,6 @@ int CP_Drain::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   return card->getStrength();
 }
 
-int Risky_Move::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
-  int damage = card->getStrength();
-  damage = a * p2->getNumberOfCP(CPColour);
-  p1->loseLP(p1->getNumberOfCP(CPColour));
-  return damage;
-}
-
 int Recover::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
   if(CPOwner == Opponent)
     p1->recoverLP(a * p2->getNumberOfCP(CPColour) + b);
@@ -183,3 +195,30 @@ int CrystalAbility::operator()(Player* p1, Player* p2, Card* OpponentCard) const
   }
   return Special->operator()(p1, p2, OpponentCard);
 }
+
+int CP_Strike::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
+  int damage = card->getStrength();
+  if(CPOwner == Opponent)
+    damage = a * p2->getNumberOfCP(CPColours);
+  else
+    damage = a * p1->getNumberOfCP(CPColours);
+  return damage;
+}
+
+int Life_Strike::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
+  int damage = p1->getLP()/a;
+  return damage;
+}
+
+int Risky_Move::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
+  int damage = card->getStrength();
+  damage = a1 * p2->getNumberOfCP(CPColour1);
+  p1->loseLP(a2 * p1->getNumberOfCP(CPColour2));
+  return damage;
+}
+
+int Reflect::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
+  int damage = a * OpponentCard->getStrength();
+  return damage;
+}
+

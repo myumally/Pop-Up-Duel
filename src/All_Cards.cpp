@@ -191,10 +191,9 @@ std::array<int, 37> BlueShield = { 20, 25, 26, 27, 28, 29, 30, 32, 34, 39, 40, 4
 std::array<int, 30> YellowShield = { 3, 6, 8, 17, 18, 25, 26, 27, 28, 29, 30, 32, 34, 38, 45, 46, 73, 75, 76, 77, 80, 81, 82, 88, 92, 97, 102, 109, 111, 116 };
 
 int c = 0; // crystal ability
-int b = 1; // bizarre
 
 std::array<int, 122> Strength = { 
-  3, 3, 0, 2, c, 7,
+  3, 3, 0, 2, 0, 7,
   2, 0, 0, 0, 6, 8,
   1, 3, 3, 4, 2, 3,
   0, 2, 3, 3, 3, 3,
@@ -202,24 +201,24 @@ std::array<int, 122> Strength = {
   0, 0, 3, 2, 3, 0,
   3, 3, 3, 0, 5, 6,
   3, 2, 0, 0, 0, 0,
-  4, 3, 5, 7, c, 0,
+  4, 3, 5, 7, 0, 0,
 
-  3, 3, 3, 0, 8, c,
-  2, 2, 0, 0, c, c,
+  3, 3, 3, 0, 8, 0,
+  2, 2, 0, 0, 0, 0,
   2, 0, 3, 2, 2, 2,
-  2, 3, 3, 0, 0, c,
+  2, 3, 3, 0, 0, 0,
 
   2, 4, c, c, 0, 2,
-  c, 4, b, 1, 6, 9,
-  3, 3, 4, 3, c, c,
-  4, 5, 5, c, 3, 4,
+  0, 4, 0, 1, 6, 9,
+  3, 3, 4, 3, 0, 0,
+  4, 5, 5, 0, 3, 4,
 
-  c, c, 0, 3, 7, c, 
-  5, 5, 5, c, c, 3,
-  3, 5, c, 0, 0,
+  c, c, 0, 3, 7, 0, 
+  5, 5, 5, 0, 0, 3,
+  3, 5, 0, 0, 0,
   2, 5, 1, 2, 6,
 
-  b, b, b, b
+  0, 0, 0, 0
 };
 
 std::array<int, 6> BurnEffect = { 6, 7, 8, 16, 118, 119 };
@@ -373,8 +372,8 @@ std::array<Card*, 122> Cards_Creation(){
   ALL_CARDS[67]->setSpecial(new CP_Drain(3, Blue, ALL_CARDS[67]));
 
   // Risky_Move
-  ALL_CARDS[8]->setSpecial(new Risky_Move(2, Red, ALL_CARDS[8]));
-  ALL_CARDS[9]->setSpecial(new Risky_Move(3, Red, ALL_CARDS[9]));
+  ALL_CARDS[8]->setSpecial(new Risky_Move(2, 1, Red, Red, ALL_CARDS[8]));
+  ALL_CARDS[9]->setSpecial(new Risky_Move(3, 1, Red, Red, ALL_CARDS[9]));
 
   // Recover
   ALL_CARDS[20]->setSpecial(new Recover(2, 0, Red, NotOpponent, ALL_CARDS[20]));
@@ -383,8 +382,13 @@ std::array<Card*, 122> Cards_Creation(){
   ALL_CARDS[61]->setSpecial(new Recover(2, 0, Blue, NotOpponent, ALL_CARDS[61])); 
   ALL_CARDS[76]->setSpecial(new Recover(0, 10, Grey, NotOpponent, ALL_CARDS[76]));
 
+  // CP_Strike
+  ALL_CARDS[80]->setSpecial(new CP_Strike(1, {Blue}, Opponent, ALL_CARDS[80]));
+  for (int i = 0; i < 4; ++i)
+    ALL_CARDS[118 + i]->setSpecial(new CP_Strike(2, {static_cast<Colour>(i + 1)}, NotOpponent, ALL_CARDS[118 + i]));
+
   // CrystalAbility
-  // ALL_CARDS[4]->setSpecial(new CrystalAbility( {1, 1, 0, 0}, NothingSpecial(ALL_CARDS[4]) ));
+  ALL_CARDS[4]->setSpecial(new CrystalAbility( {1, 1, 0, 0}, new CP_Strike(3, {Green}, Opponent, ALL_CARDS[4]) ));
   ALL_CARDS[5]->setSpecial(new CrystalAbility( {2, 0, 0, 2}, new NothingSpecial(ALL_CARDS[5]) ));
 
   ALL_CARDS[10]->setSpecial(new CrystalAbility( {3, 0, 0, 0}, new CP_Crush(MAX_CP, Red, No, ALL_CARDS[10]) ));
@@ -408,54 +412,54 @@ std::array<Card*, 122> Cards_Creation(){
   ALL_CARDS[42]->setSpecial(new CrystalAbility( {0, 2, 0, 0}, new Color_Boost(Green, 2, 0, ALL_CARDS[42]) ));
   ALL_CARDS[44]->setSpecial(new CrystalAbility( {0, 1, 0, 0}, new NothingSpecial(ALL_CARDS[44]) ));
   ALL_CARDS[45]->setSpecial(new CrystalAbility( {0, 2, 0, 0}, new NothingSpecial(ALL_CARDS[45]) ));
-  // ALL_CARDS[46]->setSpecial(new CrystalAbility( {0, 2, 0, 1}, new NothingSpecial(ALL_CARDS[46]) ));
+  ALL_CARDS[46]->setSpecial(new CrystalAbility( {0, 2, 0, 1}, new CP_Strike(1, {Green, Yellow}, NotOpponent, ALL_CARDS[46]) ));
   ALL_CARDS[47]->setSpecial(new CrystalAbility( {0, 3, 0, 0}, new Zone_Boost(4, Blank, ALL_CARDS[47]) ));
 
 
   ALL_CARDS[49]->setSpecial(new CrystalAbility( {0, 0, 1, 0}, new CP_Crush(3, Red, No, ALL_CARDS[49]) ));
   ALL_CARDS[50]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new CP_Crush(MAX_CP, Red, No, ALL_CARDS[50]) ));
   ALL_CARDS[52]->setSpecial(new CrystalAbility( {0, 1, 2, 0}, new NothingSpecial(ALL_CARDS[52]) ));
-  // ALL_CARDS[53]->setSpecial(new CrystalAbility( {0, 0, 2, 1}, new NothingSpecial(ALL_CARDS[53]) ));
+  ALL_CARDS[53]->setSpecial(new CrystalAbility( {0, 0, 2, 1}, new CP_Strike(3, {Red}, Opponent, ALL_CARDS[53]) ));
 
   ALL_CARDS[56]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new CP_Boost(MAX_CP, Blue, NotOpponent, ALL_CARDS[56]) ));
   ALL_CARDS[57]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new CP_Boost(MAX_CP, Blue, Opponent, ALL_CARDS[57]) ));
-  // ALL_CARDS[58]->setSpecial(new CrystalAbility( {0, 1, 1, 0}, new NothingSpecial(ALL_CARDS[58]) ));
-  // ALL_CARDS[59]->setSpecial(new CrystalAbility( {0, 1, 2, 0}, new NothingSpecial(ALL_CARDS[59]) ));
+  ALL_CARDS[58]->setSpecial(new CrystalAbility( {0, 1, 1, 0}, new CP_Strike(1, {Green, Blue}, Opponent, ALL_CARDS[58]) ));
+  ALL_CARDS[59]->setSpecial(new CrystalAbility( {0, 1, 2, 0}, new CP_Strike(2, {Green, Blue}, Opponent, ALL_CARDS[59]) ));
 
   ALL_CARDS[62]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new NothingSpecial(ALL_CARDS[62]) ));
   ALL_CARDS[63]->setSpecial(new CrystalAbility( {0, 0, 3, 0}, new Recover(5, 0, Blue, NotOpponent, ALL_CARDS[63]) ));
 
   ALL_CARDS[69]->setSpecial(new CrystalAbility( {0, 0, 1, 0}, new Zone_Boost(3, Shield, ALL_CARDS[69]) ));
   ALL_CARDS[70]->setSpecial(new CrystalAbility( {0, 1, 1, 1}, new Zone_Boost(5, Shield, ALL_CARDS[70]) ));
-  // ALL_CARDS[71]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new NothingSpecial(ALL_CARDS[71]) ));
+  ALL_CARDS[71]->setSpecial(new CrystalAbility( {0, 0, 2, 0}, new CP_Strike(2, {Red}, Opponent, ALL_CARDS[71]) ));
 
 
-  // ALL_CARDS[74]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new NothingSpecial(ALL_CARDS[74]) ));
-  // ALL_CARDS[75]->setSpecial(new CrystalAbility( {1, 1, 1, 3}, new NothingSpecial(ALL_CARDS[75]) ));
+  ALL_CARDS[74]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new Reflect(1, ALL_CARDS[74]) ));
+  ALL_CARDS[75]->setSpecial(new CrystalAbility( {1, 1, 1, 3}, new Reflect(2, ALL_CARDS[75]) ));
 
-  // ALL_CARDS[78]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new NothingSpecial(ALL_CARDS[78]) ));
+  ALL_CARDS[78]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new CP_Strike(3, {Blue}, Opponent, ALL_CARDS[78]) ));
   ALL_CARDS[82]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new NothingSpecial(ALL_CARDS[82]) ));
   ALL_CARDS[83]->setSpecial(new CrystalAbility( {0, 0, 0, 3}, new NothingSpecial(ALL_CARDS[83]) ));
 
-  // ALL_CARDS[88]->setSpecial(new CrystalAbility( {1, 0, 1, 1}, new NothingSpecial(ALL_CARDS[88]) ));
-  // ALL_CARDS[89]->setSpecial(new CrystalAbility( {1, 1, 1, 1}, new NothingSpecial(ALL_CARDS[89]) ));
+  ALL_CARDS[88]->setSpecial(new CrystalAbility( {1, 0, 1, 1}, new CP_Strike(1, {Red, Blue, Yellow}, Opponent, ALL_CARDS[88]) ));
+  ALL_CARDS[89]->setSpecial(new CrystalAbility( {1, 1, 1, 1}, new CP_Strike(2, {Red, Green, Blue, Yellow}, Opponent, ALL_CARDS[89]) ));
 
   ALL_CARDS[90]->setSpecial(new CrystalAbility( {0, 0, 0, 1}, new NothingSpecial(ALL_CARDS[90]) ));
   ALL_CARDS[91]->setSpecial(new CrystalAbility( {0, 1, 0, 2}, new NothingSpecial(ALL_CARDS[91]) ));
   ALL_CARDS[92]->setSpecial(new CrystalAbility( {0, 0, 0, 2}, new Color_Boost(Grey, 2, 0, ALL_CARDS[92]) ));
-  // ALL_CARDS[93]->setSpecial(new CrystalAbility( {0, 0, 0, 3}, new NothingSpecial(ALL_CARDS[93]) ));
+  ALL_CARDS[93]->setSpecial(new CrystalAbility( {0, 0, 0, 3}, new CP_Strike(1, {Red, Green, Blue}, NotOpponent, ALL_CARDS[93]) ));
 
 
-  // ALL_CARDS[96]->setSpecial(new CrystalAbility( {1, 0, 0, 2}, new NothingSpecial(ALL_CARDS[96]) ));
-  // ALL_CARDS[97]->setSpecial(new CrystalAbility( {0, 0, 1, 2}, new NothingSpecial(ALL_CARDS[97]) ));
-  // ALL_CARDS[101]->setSpecial(new CrystalAbility( {1, 1, 0, 1}, new NothingSpecial(ALL_CARDS[101]) ));
+  ALL_CARDS[96]->setSpecial(new CrystalAbility( {1, 0, 0, 2}, new Risky_Move(3, 2, Red, Blue, ALL_CARDS[96]) ));
+  ALL_CARDS[97]->setSpecial(new CrystalAbility( {0, 0, 1, 2}, new Risky_Move(3, 2, Blue, Green, ALL_CARDS[97]) ));
+  ALL_CARDS[101]->setSpecial(new CrystalAbility( {1, 1, 0, 1}, new Life_Strike(2, ALL_CARDS[101]) ));
 
-  // ALL_CARDS[105]->setSpecial(new CrystalAbility( {1, 0, 0, 1}, new NothingSpecial(ALL_CARDS[105]) ));
-  // ALL_CARDS[106]->setSpecial(new CrystalAbility( {1, 0, 0, 2}, new NothingSpecial(ALL_CARDS[106]) ));
+  ALL_CARDS[105]->setSpecial(new CrystalAbility( {1, 0, 0, 1}, new CP_Strike(2, {Red, Yellow}, Opponent, ALL_CARDS[105]) ));
+  ALL_CARDS[106]->setSpecial(new CrystalAbility( {1, 0, 0, 2}, new CP_Strike(3, {Red, Yellow}, Opponent, ALL_CARDS[106]) ));
 
   ALL_CARDS[108]->setSpecial(new CrystalAbility( {0, 1, 0, 0}, new NothingSpecial(ALL_CARDS[108]) ));
   ALL_CARDS[109]->setSpecial(new CrystalAbility( {0, 0, 1, 0}, new NothingSpecial(ALL_CARDS[109]) ));
-  // ALL_CARDS[110]->setSpecial(new CrystalAbility( {1, 2, 0, 0}, new NothingSpecial(ALL_CARDS[110]) ));
+  ALL_CARDS[110]->setSpecial(new CrystalAbility( {1, 2, 0, 0}, new Life_Strike(2, ALL_CARDS[110]) ));
   
   ALL_CARDS[117]->setSpecial(new CrystalAbility( {3, 0, 0, 0}, new NothingSpecial(ALL_CARDS[117]) ));
 

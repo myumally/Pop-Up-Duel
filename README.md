@@ -38,13 +38,13 @@ sudo apt-get install libsfml-dev
   - [x] Deck Management Methods
   - [x] CP (Crystal Points) Management Methods
   - [x] Stealing CP from another player (needed for some Specials)
-- [ ] Specials Class
+- [x] Specials Class
     - [x] Specials
     - [x] Crystal Ability
-    - [ ] Tricky Attacks
-- [ ] Cards
+    - [x] Tricky Attacks
+- [x] Cards
   - [x] Images
-  - [ ] All cards available
+  - [x] All cards available
     - [x] Ids
     - [x] Monster Names
     - [x] Attack Names
@@ -55,7 +55,7 @@ sudo apt-get install libsfml-dev
     - [x] Strength
     - [x] Specials
     - [x] Crystal Ability
-    - [ ] Tricky Attacks
+    - [x] Tricky Attacks
 - [ ] User Interface
   - [x] Choosing what to use for graphics -> **SFML**
   - [x] Deck Creation Menu
