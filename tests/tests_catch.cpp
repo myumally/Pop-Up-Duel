@@ -399,18 +399,20 @@ TEST_CASE("All Cards x Specials 4: CP_Boost"){
     std::array<Card*, 122> AllCards = Cards_Creation();
     CHECK(0 == p1->getNumberOfMostAbundantCP());
     CHECK(0 == p2->getNumberOfMostAbundantCP());
-    for(int i = 0; i < 5; ++i){
+    for(int i = 0; i < 3; ++i){
       p1->addCP(Red);
       p2->addCP(Red);
+      p1->addCP(Blue);
     }
-    CHECK(5 == p1->getNumberOfCP(Red));
-    CHECK(5 == p2->getNumberOfCP(Red));
+    CHECK(3 == p1->getNumberOfCP(Red));
+    CHECK(3 == p2->getNumberOfCP(Red));
     p2->loseLP(AllCards[22]->getSpecial()->operator()(p1, p2, AllCards[11]));
-    CHECK(8 == p1->getNumberOfCP(Red));
-    CHECK(5 == p2->getNumberOfCP(Red));
+    CHECK(6 == p1->getNumberOfCP(Red)); 
+    CHECK(3 == p1->getNumberOfCP(Blue));
+    CHECK(3 == p2->getNumberOfCP(Red));
     p2->loseLP(AllCards[57]->getSpecial()->operator()(p1, p2, AllCards[11]));
-    CHECK(8 == p1->getNumberOfCP(Red));
-    CHECK(5 == p2->getNumberOfCP(Blue));
+    CHECK(6 == p1->getNumberOfCP(Red));
+    CHECK(3 == p2->getNumberOfCP(Blue));
 }
 
 TEST_CASE("All Cards x Specials 5: CP_Crush"){
@@ -421,6 +423,7 @@ TEST_CASE("All Cards x Specials 5: CP_Crush"){
     for(int i = 0; i < MAX_CP/2; ++i){
       p2->addCP(Red);
       p2->addCP(Green);
+      p1->addCP(Red);
     }
     CHECK(5 == p2->getNumberOfCP(Red));
     CHECK(5 == p2->getNumberOfCP(Green));
@@ -472,6 +475,7 @@ TEST_CASE("All Cards x Specials 8: Recover"){
     for(int i = 0; i < 5; ++i){
       p1->addCP(Red);
       p2->addCP(Red);
+      p1->addCP(Blue);
     }
     p1->loseLP(15);
     p2->loseLP(AllCards[14]->getSpecial()->operator()(p1, p2, AllCards[36]));
