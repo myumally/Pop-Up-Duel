@@ -190,7 +190,37 @@ std::array<int, 37> BlueShield = { 20, 25, 26, 27, 28, 29, 30, 32, 34, 39, 40, 4
 
 std::array<int, 30> YellowShield = { 3, 6, 8, 17, 18, 25, 26, 27, 28, 29, 30, 32, 34, 38, 45, 46, 73, 75, 76, 77, 80, 81, 82, 88, 92, 97, 102, 109, 111, 116 };
 
-// std::array<std::string, 122> Strength = {  };
+int c = 0; // crystal ability
+int b = 1; // bizarre
+
+std::array<int, 122> Strength = { 
+  3, 3, 0, 2, c, c,
+  2, 0, 0, 0, c, c,
+  1, 3, c, c, 2, 3,
+  0, 2, 3, 3, 3, 3,
+
+  0, 0, c, c, 3, c,
+  3, 3, 3, c, c, c,
+  3, 2, c, c, 0, 0,
+  c, 3, c, c, c, c,
+
+  3, c, c, 0, c, c,
+  2, 2, c, c, c, c,
+  2, 0, c, c, 2, 2,
+  2, 3, 3, c, c, c,
+
+  2, 4, c, c, 0, 2,
+  c, 4, b, 1, c, c,
+  3, 3, 4, 3, c, c,
+  c, c, c, c, 3, 4,
+
+  c, c, 0, 3, 7, c, 
+  5, 5, 5, c, c, 3,
+  c, c, c, 0, 0,
+  2, 5, 1, 2, c,
+
+  b, b, b, b
+};
 
 std::array<int, 6> BurnEffect = { 6, 7, 8, 16, 118, 119 };
 
