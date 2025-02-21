@@ -28,9 +28,10 @@ CP_Boost::CP_Boost(int NbCP, Colour Col, PlayerType Ow, Card* Card){
   card = Card;
 }
 
-CP_Crush::CP_Crush( int NbCP, std::list<Colour> Cols, Card* Card){
+CP_Crush::CP_Crush( int NbCP, Colour Col, SpecialColour sc, Card* Card){
   nbCP = NbCP;
-  CPColours = Cols;
+  CPColour = Col;
+  SC = sc;
   card = Card;
 }
 
@@ -96,16 +97,36 @@ int CP_Boost::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
 }
 
 int CP_Crush::operator()(Player* p1, Player* p2, Card* OpponentCard) const{
-  Colour col;
-  for(Colour cp : CPColours){
-    if(cp == Grey)
-      col = p2->getMostAbundantCP();
+  if (SC == All){
+    for(int i = 1; i < 5; ++i){
+      p2->removeAllSpecificCP(static_cast<Colour>(i));
+    }
+  }
+  else{
+    Colour col;
+
+    switch (SC) {
+      case MostAbundant:
+        col = p2->getMostAbundantCP();
+        break;
+
+      case OppCard:
+        col = OpponentCard->getColour();
+        break;
+
+      default:
+        col = CPColour;
+        break;
+    }
+
     if(nbCP < MAX_CP){
       for(int i = 0; i<nbCP; ++i)
         p2->removeCP(col);
     }
-    else 
-      p2->removeAllSpecificCP(cp);
+    else {
+      p2->removeAllSpecificCP(col);
+    }
+
   }
   return card->getStrength();
 }

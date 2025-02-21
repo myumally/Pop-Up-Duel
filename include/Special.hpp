@@ -63,9 +63,10 @@ class CP_Boost : public ISpecial{
 class CP_Crush : public ISpecial{
   private:
     int nbCP;
-    std::list<Colour> CPColours;
+    Colour CPColour;
+    SpecialColour SC;
   public:
-    CP_Crush( int NbCP, std::list<Colour> Cols, Card* Card);
+    CP_Crush( int NbCP, Colour Col, SpecialColour sc, Card* Card);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 
