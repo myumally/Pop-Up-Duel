@@ -11,6 +11,7 @@ class ISpecial {
   protected: 
     Card* card;
   public:
+    Card* getCard() const;
     virtual int operator()(Player* p1, Player* p2, Card* OpponentCard) const = 0;
     virtual ~ISpecial() = default;
 };
@@ -113,7 +114,7 @@ class CrystalAbility: public ISpecial{
     std::array<int, 4> CPs;
     ISpecial* Special;
   public:
-    CrystalAbility(std::array<int, 4> cps, ISpecial* spec, Card* Card);
+    CrystalAbility(std::array<int, 4> cps, ISpecial* spec);
     int operator()(Player* p1, Player* p2, Card* OpponentCard) const;
 };
 

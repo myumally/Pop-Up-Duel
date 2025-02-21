@@ -1,6 +1,10 @@
 #include "../include/Special.hpp"
 #include "../include/all_includes.hpp"
 
+Card* ISpecial::getCard() const{
+  return card;
+}
+
 Rebound::Rebound(int NbLP, int A, int B, Card* Card){
   nbLP = NbLP;
   a = A;
@@ -59,10 +63,10 @@ NothingSpecial::NothingSpecial(Card* Card){
   card = Card;
 }
 
-CrystalAbility::CrystalAbility(std::array<int, 4> cps, ISpecial* spec, Card* Card){
+CrystalAbility::CrystalAbility(std::array<int, 4> cps, ISpecial* spec){
   CPs = cps;
   Special = spec;
-  card = Card;
+  Special->getCard()->setCrystalAbility(true);
 }
 
 
