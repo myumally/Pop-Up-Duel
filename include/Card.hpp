@@ -9,7 +9,6 @@
 
 #include "Special.hpp"
 
-// To-Do : gérer les spéciaux
 // To-Do : Crystal Ability
 
 class Card{
@@ -33,6 +32,8 @@ class Card{
   int strength;
 
   ISpecial* special;
+
+  bool CrystalAbility = false;
 
   public :
 
@@ -84,6 +85,9 @@ class Card{
 
   ISpecial* getSpecial() const;
   void setSpecial(ISpecial*  newSpecial);
+
+  bool hasCrystalAbility() const;
+  void setCrystalAbility(bool ca);
 
   void toStream(std::ostream& os = std::cout) const;
 

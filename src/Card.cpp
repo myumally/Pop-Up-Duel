@@ -239,6 +239,14 @@ void Card::setSpecial(ISpecial*  newSpecial){
   special = newSpecial;
 }
 
+bool Card::hasCrystalAbility() const{
+  return CrystalAbility;
+}
+
+void Card::setCrystalAbility(bool ca){
+  CrystalAbility = ca;
+}
+
 void Card::toStream(std::ostream& os) const{
   os<<"Monster Name: " << MonsterName <<" Attack Name: " << AttackName <<" id: " << id <<" Colour: " << colour;
 }
