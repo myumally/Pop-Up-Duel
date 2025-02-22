@@ -28,10 +28,6 @@ int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPow
 
     case Numb:
       if(c2->getColour() == Yellow) NewAttackPower2 = NewAttackPower2 * 2;
-      break; 
-
-    case Silence:
-      // to-do annuler crystal ability
       break;
 
     default:
@@ -54,36 +50,35 @@ void AffectNewEffect(Player* p1, Card* c1, Player* p2){
   }
 }
 
+void DamagePhase(bool ca1, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect2, Effect OldOpponentEffect2, int a){
+  int AttackPower = c1->getStrength();
+  if(ca1){
+    AffectNewEffect(p1, c1, p2);
+    AttackPower = c1->getSpecial()->operator()(p1, p2, c2);
+    if(!(p2->isAffectedBySelfEffect() == Refresh)) 
+      AttackPower = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower);
+    p2->loseLP(AttackPower/a);
+  }
+}
+
 void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2){
   Colour FocusZone;
-  int AttackPower1 = c1->getStrength();
-  int AttackPower2 = c2->getStrength();
+  bool ca1 = (!((OldOpponentEffect1 == Silence) && c1->hasCrystalAbility()));
+  bool ca2 = (!((OldOpponentEffect2 == Silence) && c2->hasCrystalAbility()));
   if(c1->hasSwordAttack()){
     FocusZone = c1->getSwordZone();
     switch (c2->getZones()[FocusZone - 1]) {
       case Blank:
-        AffectNewEffect(p1, c1, p2);
-        AttackPower1 = c1->getSpecial()->operator()(p1, p2, c2);
-        if(!(p2->isAffectedBySelfEffect() == Refresh)) 
-          AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
-        p2->loseLP(AttackPower1);
+        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 1);
         break;
 
       case Sword:
-        AffectNewEffect(p1, c1, p2);
-        AttackPower1 = c1->getSpecial()->operator()(p1, p2, c2);
-        if(!(p2->isAffectedBySelfEffect() == Refresh)) 
-          AttackPower1 = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower1);
-        p2->loseLP(AttackPower1/2); 
+        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 2);
         break;
 
       case Shield:
         if(!c2->hasSwordAttack()){
-          AffectNewEffect(p2, c2, p1);
-          AttackPower2 = c2->getSpecial()->operator()(p2, p1, c1);
-          if(!(p1->isAffectedBySelfEffect() == Refresh)) 
-            AttackPower2 = StrengthManagement(OldSelfEffect1, OldOpponentEffect1, c2, AttackPower2);
-          p1->loseLP(AttackPower2);
+          DamagePhase(ca2, p2, c2, p1, c1, OldSelfEffect1, OldOpponentEffect1, 1);
         }
         break;
 

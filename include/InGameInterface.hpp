@@ -15,6 +15,8 @@ int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPow
 
 void AffectNewEffect(Player* p1, Card* c1, Player* p2);
 
+void DamagePhase(bool ca1, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect2, Effect OldOpponentEffect2, int a);
+
 void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2);
 
 void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2);
