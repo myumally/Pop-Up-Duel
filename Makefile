@@ -16,12 +16,13 @@ TEST_SRC=$(wildcard tests/*.cpp)
 TEST_OBJ=$(addprefix build/,$(TEST_SRC:tests/%.cpp=%.o))
 TEST_DEP=$(addprefix build/,$(TEST_SRC:tests/%.cpp=%.d))
 
-all: $(EXE) $(TEST_EXE)
+all: $(EXE) 
 
 # Compilation du programme principal
 $(EXE): $(OBJ)
 	$(CXX) -o $(EXE) $^ $(LDFLAGS)
 
+test: $(TEST_EXE)
 # Compilation des tests
 $(TEST_EXE): $(TEST_OBJ)
 	$(CXX) -o $(TEST_EXE) $^ $(LDFLAGS)
