@@ -7,9 +7,9 @@
 - make (If you're on Windows you don't need it)
 - SFML library
 
-### How to install (Linux)
+## How to install (Linux)
 
-Clone the repo then launch with :
+#### Clone the repo then launch with :
 ```
 git clone https://github.com/myumally/Pop-Up-Duel.git
 cd  Pop-Up-Duel
@@ -17,14 +17,14 @@ make
 ./pop <adress IP of your Opponent>
 ```
 
-If needed install the SFML library with :
+#### If needed install the SFML library with :
 ```
 sudo apt-get install libsfml-dev
 ```
 
-### How to install (Windows)
+## How to install (Windows)
 
-Clone the repo then launch with :
+#### Clone the repo then launch with :
 ```
 git clone https://github.com/myumally/Pop-Up-Duel.git
 cd  Pop-Up-Duel
@@ -32,7 +32,7 @@ cd  Pop-Up-Duel
 ./pop <adress IP of your Opponent>
 ```
 
-If needed install the SFML library :
+#### If needed install the SFML library :
 - First go on the official site to download *sfml-2.6.2* : https://www.sfml-dev.org/download/sfml/2.6.2/
 - Download the version **GCC 13.1.0 MinGW (SEH) - 64-bit**
 - Extract the file in **C:**
@@ -45,7 +45,7 @@ If needed install the SFML library :
 $env:PATH += ";C:\SFML-2.6.2\bin"
 ```
 
-If you do not have gcc/g++ :
+#### If you do not have gcc/g++ :
 - install MSYS2 using the powershell
 ```
 winget install -e --id MSYS2.MSYS2
@@ -62,7 +62,14 @@ pacman -S mingw-w64-x86_64-gcc
 ```
 $env:PATH += ";C:\msys64\mingw64\bin"
 ```
-- You can find other method on internet 
+- You can find other method on internet
+
+#### If you do not have git :
+- install git using the powershell
+
+```
+winget install --id Git.Git -e --source winget
+```
 
 ### To-Do List
 
