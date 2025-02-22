@@ -1,7 +1,7 @@
 @echo off
 set CXX=g++
-set CXXFLAGS=-Wall -Wextra -I C:\SFML\include -I include -g
-set LDFLAGS=-LC:\SFML\lib -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
+set CXXFLAGS=-Wall -Wextra -I C:\SFML-2.6.2\include -I include -g
+set LDFLAGS=-LC:\SFML-2.6.2\lib -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
 
 rem Noms des exécutables
 set EXE=pop.exe
