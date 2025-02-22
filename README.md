@@ -16,6 +16,7 @@ cd  Pop-Up-Duel
 make 
 ./pop <adress IP of your Opponent>
 ```
+Note that if you do do not know the IP you can just use ``` ./pop ``` then your IP will be printed in the terminal. Your Opponent can now use ``` ./pop <your IP> ```
 
 ### If needed install the SFML library with :
 ```
@@ -31,6 +32,7 @@ cd  Pop-Up-Duel
 ./build.bat
 ./pop <adress IP of your Opponent>
 ```
+Note that if you do do not know the IP you can just use ``` ./pop ``` then your IP will be printed in the terminal. Your Opponent can now use ``` ./pop <your IP> ```
 
 ### If needed install the SFML library :
 - First go on the official site to download *sfml-2.6.2* : https://www.sfml-dev.org/download/sfml/2.6.2/
