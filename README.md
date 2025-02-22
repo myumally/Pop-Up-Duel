@@ -36,6 +36,14 @@ If needed install the SFML library :
 - First go on the official site to download *sfml-2.6.2* : https://www.sfml-dev.org/download/sfml/2.6.2/
 - Download the version **GCC 13.1.0 MinGW (SEH) - 64-bit**
 - Extract the file in **C:**
+- Add the path using the powershell in admin mode : 
+```
+[System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\SFML-2.6.2\bin", [System.EnvironmentVariableTarget]::Machine)
+```
+- If you can't acced the powershell in admin mode, add the path only for the current session :
+```
+$env:PATH += ";C:\SFML-2.6.2\bin"
+```
 
 If you do not have gcc/g++ :
 - install MSYS2 using the powershell
