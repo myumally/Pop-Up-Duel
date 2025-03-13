@@ -95,9 +95,6 @@ void InGameInterface::DamagePhase(bool ca1, Player* p1, Card* c1, Player* p2, Ca
   }
 }
 
-// Probleme :
-//    Pas d'affichage quand il ne se passe rien
-
 void InGameInterface::AttackPhase(sf::RenderWindow& window, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2){ 
   Colour FocusZone = c1->getSwordZone();
   bool ca1 = (!((OldOpponentEffect1 == Silence) && c1->hasCrystalAbility()));
@@ -375,14 +372,13 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
             id_mouse_card = i;
             PlayerOneSelectedCard = id_mouse_card;
 
+            sprites[PlayerOneSelectedCard - 1].setScale(2.2f, 2.2f);            
+
             if(!player2->hasPriority()){
               player1->setPriority(true);
               sendBool(socket, player1->hasPriority());
               receiveBool(socket, player2->hasPriority());
             }
-
-            sendId(socket, PlayerOneSelectedCard);
-            receiveId(socket, PlayerTwoSelectedCard);
 
             // PlayerTwoSelectedCard = PlayerTwoHand[0];
             RUN_SELECTION_PHASE = false;
@@ -393,22 +389,18 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
       else if (clock.getElapsedTime().asSeconds() >= timeLimit){
         PlayerOneSelectedCard = PlayerOneHand[0];
 
-        sendId(socket, PlayerOneSelectedCard);
-        receiveId(socket, PlayerTwoSelectedCard);
+        sendBool(socket, player1->hasPriority());
+        receiveBool(socket, player2->hasPriority());
 
         RUN_SELECTION_PHASE = false;
         RUN_COMBAT_PHASE = true;
       }
 
-
       // render
-
       window.clear();
 
       cardCount = 0;
       for (int id : PlayerOneHand ){ 
-
-        sprites[id - 1].setScale(2.0f, 2.0f);
         CardSpriteWidth = sprites[id - 1].getTexture()->getSize().x * sprites[id - 1].getScale().x;
         CardSpriteHeight = sprites[id - 1].getTexture()->getSize().y * sprites[id - 1].getScale().y;
 
@@ -526,8 +518,13 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
     }
 
 
+    sprites[PlayerOneSelectedCard - 1].setScale(2.0f, 2.0f);
 
-    if(window.isOpen() && RUN_COMBAT_PHASE){ 
+    sendId(socket, PlayerOneSelectedCard);
+    receiveId(socket, PlayerTwoSelectedCard);
+
+
+    if(window.isOpen() && RUN_COMBAT_PHASE){
 
       // animation
 
