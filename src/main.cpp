@@ -272,6 +272,7 @@ int main(int argc, char **argv) {
       return -1;
     }
     sprites[i].setTexture(textures[i]);
+    sprites[i].setScale(2.0f, 2.0f);
   }
   sf::Texture swordTexture, shieldTexture;
   if (!swordTexture.loadFromFile("assets/images/sword.png") || !shieldTexture.loadFromFile("assets/images/shield.png")) {
