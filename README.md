@@ -111,7 +111,7 @@ winget install --id Git.Git -e --source winget
   - [x] Choosing what to use for graphics -> **SFML**
   - [x] Deck Creation Menu
   - [ ] Home Menu
-  - [ ] InGame Interface
+  - [x] InGame Interface
     - [x] Each player draw 3 cards from their deck
     - [x] Active player cards in the center
     - [x] Opponent card's colours in the corner
@@ -119,7 +119,7 @@ winget install --id Git.Git -e --source winget
     - [x] Player's CP
     - [x] Player's Effects
     - [x] 15 seconds to choose a card
-    - [ ] Combat Phase
+    - [x] Combat Phase
         - [x] LP Management
         - [x] CP Management
         - [x] Hand Management
@@ -127,7 +127,7 @@ winget install --id Git.Git -e --source winget
         - [x] Effects Management
         - [x] Specials
         - [x] Crystal Ability
-        - [ ] Little Animation
+        - [x] Little Animation
     - [x] End of the game
 - [x] Network Play
     - [x] Local Network Play
