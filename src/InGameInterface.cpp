@@ -1,143 +1,5 @@
 #include "../include/InGameInterface.hpp"
 
-void PriorityManagement(Player* p1, Player* p2){
-  if(p1->isAffectedBySelfEffect() == Haste && p2->isAffectedBySelfEffect() != Haste){
-    p1->setPriority(true);
-    p2->setPriority(false);
-  }
-  else if(p1->isAffectedByOpponentEffect() == Slow && p2->isAffectedByOpponentEffect() != Slow){
-    p2->setPriority(true);
-    p1->setPriority(false);
-  } 
-}
-
-int StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPower2){
-  int NewAttackPower2 = AttackPower2;
-  switch (opponentEf) {
-    case Burn:
-      if(c2->getColour() == Red) NewAttackPower2 = NewAttackPower2 * 2;
-      break;
-
-    case Poison:
-      if(c2->getColour() == Green) NewAttackPower2 = NewAttackPower2 * 2;
-      break;
-
-    case Freeze:
-      if(c2->getColour() == Blue) NewAttackPower2 = NewAttackPower2 * 2;
-      break;
-
-    case Numb:
-      if(c2->getColour() == Yellow) NewAttackPower2 = NewAttackPower2 * 2;
-      break;
-
-    default:
-      break;
-  }
-
-  if(selfEf == Protect){
-    NewAttackPower2 = NewAttackPower2 / 2;
-  }
-
-  return NewAttackPower2;
-}
-
-void AffectNewEffect(Player* p1, Card* c1, Player* p2){
-  if(std::find(Player::OpponentEffect.begin(), Player::OpponentEffect.end(), c1->getEffect()) != Player::OpponentEffect.end()){
-    p2->setAffectedBy(c1->getEffect());
-  }
-  else if (std::find(Player::SelfEffect.begin(), Player::SelfEffect.end(), c1->getEffect()) != Player::SelfEffect.end()){
-    p1->setAffectedBy(c1->getEffect());
-  }
-}
-
-void DamagePhase(bool ca1, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect2, Effect OldOpponentEffect2, int a){
-  int AttackPower = c1->getStrength();
-  if(ca1){
-    AffectNewEffect(p1, c1, p2);
-    AttackPower = c1->getSpecial()->operator()(p1, p2, c2);
-    if(!(p2->isAffectedBySelfEffect() == Refresh)) 
-      AttackPower = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower);
-    p2->loseLP(AttackPower/a);
-  }
-}
-
-void AttackPhase(Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2){
-  Colour FocusZone;
-  bool ca1 = (!((OldOpponentEffect1 == Silence) && c1->hasCrystalAbility()));
-  bool ca2 = (!((OldOpponentEffect2 == Silence) && c2->hasCrystalAbility()));
-  if(c1->hasSwordAttack()){
-    FocusZone = c1->getSwordZone();
-    switch (c2->getZones()[FocusZone - 1]) {
-      case Blank:
-        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 1);
-        break;
-
-      case Sword:
-        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 2);
-        break;
-
-      case Shield:
-        if(!c2->hasSwordAttack()){
-          DamagePhase(ca2, p2, c2, p1, c1, OldSelfEffect1, OldOpponentEffect1, 1);
-        }
-        break;
-
-      default:
-
-        break;
-    }
-  }
-
-  if(c1->getColour() != Grey){
-    p1->addCP(c1->getColour());
-  }
-} 
-
-void CombatPhase(Player* p1, Card* c1, Player* p2, Card* c2){
-
-  Effect OldSelfEffect1 = p1->isAffectedBySelfEffect();
-  Effect OldOpponentEffect1 = p1->isAffectedByOpponentEffect();
-
-  Effect OldSelfEffect2 = p2->isAffectedBySelfEffect();
-  Effect OldOpponentEffect2 = p2->isAffectedByOpponentEffect();
-
-  PriorityManagement(p1, p2);
-
-  p1->setAffectedBy(Nothing);
-  p2->setAffectedBy(Nothing);
-
-  if(p1->hasPriority()){
-    AttackPhase(p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2);
-    AttackPhase(p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
-  }
-  else {
-    AttackPhase(p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
-    AttackPhase(p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2);
-  }
-
-  p1->setPriority(false);
-  p2->setPriority(false);
-}
-
-void InGameInterface::setPlayers(Player* p1, Player* p2){
-  player1 = p1;
-  player2 = p2;
-}
-
-Player* InGameInterface::getPlayerOne(){
-  return player1;
-}
-
-Player* InGameInterface::getPlayerTwo(){
-  return player2;
-}
-
-InGameInterface::InGameInterface(const std::vector<sf::Sprite>& Sprites, Player* p1, Player* p2){
-  sprites = Sprites;
-  player1 = p1;
-  player2 = p2;
-}
-
 void createCrystalShape(sf::ConvexShape& ColourCrystal, sf::Vector2f Up, sf::Vector2f Right, sf::Vector2f Down, sf::Vector2f Left){
   ColourCrystal.setPointCount(4);
   ColourCrystal.setPoint(0, Up);
@@ -172,6 +34,156 @@ std::string effectToString(Effect ef) {
   }
 }
 
+void InGameInterface::PriorityManagement(Player* p1, Player* p2){
+  if(p1->isAffectedBySelfEffect() == Haste && p2->isAffectedBySelfEffect() != Haste){
+    p1->setPriority(true);
+    p2->setPriority(false);
+  }
+  else if(p1->isAffectedByOpponentEffect() == Slow && p2->isAffectedByOpponentEffect() != Slow){
+    p2->setPriority(true);
+    p1->setPriority(false);
+  } 
+}
+
+int InGameInterface::StrengthManagement(Effect selfEf, Effect opponentEf, Card* c2, int AttackPower2){
+  int NewAttackPower2 = AttackPower2;
+  switch (opponentEf) {
+    case Burn:
+      if(c2->getColour() == Red) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Poison:
+      if(c2->getColour() == Green) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Freeze:
+      if(c2->getColour() == Blue) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    case Numb:
+      if(c2->getColour() == Yellow) NewAttackPower2 = NewAttackPower2 * 2;
+      break;
+
+    default:
+      break;
+  }
+
+  if(selfEf == Protect){
+    NewAttackPower2 = NewAttackPower2 / 2;
+  }
+
+  return NewAttackPower2;
+}
+
+void InGameInterface::AffectNewEffect(Player* p1, Card* c1, Player* p2){
+  if(std::find(Player::OpponentEffect.begin(), Player::OpponentEffect.end(), c1->getEffect()) != Player::OpponentEffect.end()){
+    p2->setAffectedBy(c1->getEffect());
+  }
+  else if (std::find(Player::SelfEffect.begin(), Player::SelfEffect.end(), c1->getEffect()) != Player::SelfEffect.end()){
+    p1->setAffectedBy(c1->getEffect());
+  }
+}
+
+void InGameInterface::DamagePhase(bool ca1, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect2, Effect OldOpponentEffect2, int a){
+  int AttackPower = c1->getStrength();
+  if(ca1){
+    AffectNewEffect(p1, c1, p2);
+    AttackPower = c1->getSpecial()->operator()(p1, p2, c2);
+    if(!(p2->isAffectedBySelfEffect() == Refresh)) 
+      AttackPower = StrengthManagement(OldSelfEffect2, OldOpponentEffect2, c1, AttackPower);
+    p2->loseLP(AttackPower/a);
+  }
+}
+
+// Probleme :
+//    Pas d'affichage quand il ne se passe rien
+
+void InGameInterface::AttackPhase(sf::RenderWindow& window, Player* p1, Card* c1, Player* p2, Card* c2, Effect OldSelfEffect1, Effect OldOpponentEffect1, Effect OldSelfEffect2, Effect OldOpponentEffect2){ 
+  Colour FocusZone = c1->getSwordZone();
+  bool ca1 = (!((OldOpponentEffect1 == Silence) && c1->hasCrystalAbility()));
+  bool ca2 = (!((OldOpponentEffect2 == Silence) && c2->hasCrystalAbility())); 
+  
+  if(FocusZone){
+    ZoneType opponentZoneType = c2->getZones()[FocusZone - 1];
+    switch (opponentZoneType) {
+      case Blank:
+        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 1);
+        AttackAnimation (window, Blank, p1);
+        break;
+
+      case Sword:
+        DamagePhase(ca1, p1, c1, p2, c2, OldSelfEffect2, OldOpponentEffect2, 2);
+        AttackAnimation (window, Sword, p1);
+        break;
+
+      case Shield:
+        if(!c2->hasSwordAttack()){
+          DamagePhase(ca2, p2, c2, p1, c1, OldSelfEffect1, OldOpponentEffect1, 1);   
+        }
+        AttackAnimation (window, Shield, p1);
+        break;
+
+      default:
+
+        break;
+    }
+  }
+  else if (!(c2->getSwordZone())) {
+    shield_vs_shield(window);
+  }
+
+  if(c1->getColour() != Grey){
+    p1->addCP(c1->getColour());
+  }
+} 
+
+void InGameInterface::CombatPhase(sf::RenderWindow& window, Player* p1, Card* c1, Player* p2, Card* c2){
+
+  Effect OldSelfEffect1 = p1->isAffectedBySelfEffect();
+  Effect OldOpponentEffect1 = p1->isAffectedByOpponentEffect();
+
+  Effect OldSelfEffect2 = p2->isAffectedBySelfEffect();
+  Effect OldOpponentEffect2 = p2->isAffectedByOpponentEffect();
+
+  PriorityManagement(p1, p2);
+
+  p1->setAffectedBy(Nothing);
+  p2->setAffectedBy(Nothing);
+
+  if(p1->hasPriority()){
+    AttackPhase(window, p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2); 
+    AttackPhase(window, p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
+  }
+  else {
+    AttackPhase(window, p2, c2, p1, c1, OldSelfEffect2, OldOpponentEffect2, OldSelfEffect1, OldOpponentEffect1);
+    AttackPhase(window, p1, c1, p2, c2, OldSelfEffect1, OldOpponentEffect1, OldSelfEffect2, OldOpponentEffect2);
+  }
+
+  p1->setPriority(false);
+  p2->setPriority(false);
+}
+
+void InGameInterface::setPlayers(Player* p1, Player* p2){
+  player1 = p1;
+  player2 = p2;
+}
+
+Player* InGameInterface::getPlayerOne(){
+  return player1;
+}
+
+Player* InGameInterface::getPlayerTwo(){
+  return player2;
+}
+
+InGameInterface::InGameInterface(const std::vector<sf::Sprite>& Sprites, sf::Sprite sw, sf::Sprite sh, sf::Sprite sw2, Player* p1, Player* p2){
+  sword = sw;
+  shield = sh;
+  sword2 = sw2;
+  sprites = Sprites;
+  player1 = p1;
+  player2 = p2;
+}
 
 void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, sf::TcpSocket& socket){
 
@@ -188,10 +200,6 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> getRandomInt(0,DECK_SIZE -1); // distribution in range [0, DECK_SIZE - 1]
-
-
-  float CardSpriteWidth;
-  float CardSpriteHeight;
 
   Colour col;
 
@@ -273,9 +281,6 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   std::vector<int> PlayerOneHand;
   std::vector<int> PlayerTwoHand;
 
-  int PlayerOneSelectedCard;
-  int PlayerTwoSelectedCard;  
-
   int Drawed_Id; 
 
   for(int i = 0; i < 3; i++){
@@ -303,7 +308,7 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   int cardCount = 0;
   int crystalCount = 0;
 
-
+/*
   for (int id : PlayerOneHand){
     std::cout << "Carte piochée : " << id << std::endl;
   }
@@ -311,7 +316,7 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
   for (int id : PlayerTwoHand){
     std::cout << "Carte piochée adversaire : " << id << std::endl;
   }
-
+*/
 
   // mouse's position and state
   int x = 0;
@@ -520,45 +525,21 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
       window.display();
     }
 
-    while(window.isOpen() && RUN_COMBAT_PHASE){
 
-      mouse_state = 0;
 
-      while (window.pollEvent(event))
-      {
-        // check the type of the event...
-        switch (event.type)
-        {
-          // window closed
-          case sf::Event::Closed:
-            window.close();
-            break;
+    if(window.isOpen() && RUN_COMBAT_PHASE){ 
 
-          case sf::Event::MouseButtonPressed:
-            x = event.mouseButton.x;
-            y = event.mouseButton.y;
-            mouse_state = 1;          
-            break;
+      // animation
 
-          case sf::Event::MouseMoved:
-            x = event.mouseMove.x;
-            y = event.mouseMove.y;          
-            break;
-
-          default:
-            break;
-        }
-      }
+      CombatPhase(window, player1, AllCards[PlayerOneSelectedCard - 1], player2, AllCards[PlayerTwoSelectedCard - 1]); 
 
       // update
-
-      CombatPhase(player1, AllCards[PlayerOneSelectedCard - 1], player2, AllCards[PlayerTwoSelectedCard - 1]); 
 
       PlayerOneName.setString({player1->getName() + " - " + std::to_string(player1->getLP()) + "LP"});
       PlayerTwoName.setString({player2->getName() + " - " + std::to_string(player2->getLP()) + "LP"});
 
       Effect1.setString({effectToString(player1->isAffectedBySelfEffect()) + " " + effectToString(player1->isAffectedByOpponentEffect())});
-      Effect2.setString({effectToString(player2->isAffectedBySelfEffect()) + " " + effectToString(player2->isAffectedByOpponentEffect())});
+      Effect2.setString({effectToString(player2->isAffectedBySelfEffect()) + " " + effectToString(player2->isAffectedByOpponentEffect())}); 
 
       Drawed_Id = vectDeck1[getRandomInt(rng)]->getId();
       while(std::find(PlayerOneHand.begin(), PlayerOneHand.end(), Drawed_Id) != PlayerOneHand.end()){
@@ -588,31 +569,9 @@ void InGameInterface::run(sf::RenderWindow& window, const sf::Font& font, const 
       else{
         RUN_END_PHASE = true;
       }
-
-      // render
-
-      window.clear(); 
-
-      sprites[PlayerOneSelectedCard - 1].setScale(2.0f, 2.0f);
-      sprites[PlayerTwoSelectedCard - 1].setScale(2.0f, 2.0f);
-
-      CardSpriteWidth = sprites[PlayerOneSelectedCard - 1].getTexture()->getSize().x * sprites[PlayerOneSelectedCard - 1].getScale().x;
-      CardSpriteHeight = sprites[PlayerOneSelectedCard - 1].getTexture()->getSize().y * sprites[PlayerOneSelectedCard - 1].getScale().y;
-
-      sprites[PlayerOneSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f, (window.getSize().y - CardSpriteHeight)/2);
-
-      window.draw(sprites[PlayerOneSelectedCard - 1]);
-
-      sprites[PlayerTwoSelectedCard - 1].setPosition((window.getSize().x - 3 * CardSpriteWidth)/2 - 30.f + 2 * (CardSpriteWidth + 30.f), (window.getSize().y - CardSpriteHeight)/2);
-
-      window.draw(sprites[PlayerTwoSelectedCard - 1]);
-
-      window.draw(PlayerOneName);
-      window.draw(PlayerTwoName);
-
-      window.display();
-      sf::sleep(sf::seconds(3));
     }
+
+
 
     while(window.isOpen() && RUN_END_PHASE){
 

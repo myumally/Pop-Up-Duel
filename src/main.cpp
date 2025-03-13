@@ -152,7 +152,7 @@ void WaitingScreen(sf::RenderWindow& window, const sf::Font& font, std::string t
 }
 
 
-void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, const std::vector<sf::Sprite>& sprites, sf::TcpSocket &socket, Player* p1, Player* p2){
+void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Card*, 122>& AllCards, const std::vector<sf::Sprite>& sprites, sf::Sprite sword, sf::Sprite shield, sf::Sprite sword2, sf::TcpSocket &socket, Player* p1, Player* p2){
 
   std::vector<int> Player_ids;
   std::vector<int> Opponent_ids;
@@ -161,7 +161,6 @@ void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Ca
   dcm.run(window, AllCards);
 
   for (Card* c : p1->getDeck()){
-    std::cout << "Carte : " << c->getId() << std::endl;
     Player_ids.push_back(c->getId());
   }
 
@@ -171,12 +170,9 @@ void runGame(sf::RenderWindow& window, const sf::Font& font, const std::array<Ca
 
   for (int id : Opponent_ids){
     p2->addCard(id, AllCards);
-  }
-  for (Card* c : p2->getDeck()){
-    std::cout << "Carte adversaire : " << c->getId() << std::endl;
-  }
+  } 
 
-  InGameInterface igi(sprites, p1, p2);
+  InGameInterface igi(sprites, sword, shield, sword2, p1, p2);
   igi.run(window, font, AllCards, socket);
 
 }
@@ -273,9 +269,20 @@ int main(int argc, char **argv) {
   for (int i = 0; i < 122; ++i) {
     std::string filename = "assets/Pop-Up_Duel_Cards/" + ImageNames[i];
     if (!textures[i].loadFromFile(filename)) {
+      return -1;
     }
     sprites[i].setTexture(textures[i]);
   }
+  sf::Texture swordTexture, shieldTexture;
+  if (!swordTexture.loadFromFile("assets/images/sword.png") || !shieldTexture.loadFromFile("assets/images/shield.png")) {
+    return -1;
+  }
+  sf::Sprite sword(swordTexture);
+  sword.setScale(0.5, 0.5);
+  sf::Sprite sword2(swordTexture);
+  sword2.setScale(-0.5, 0.5);
+  sf::Sprite shield(shieldTexture);
+  shield.setScale(0.5, 0.5);
 
   // Create the Cards
   std::array<Card*, 122> AllCards = Cards_Creation();
@@ -287,12 +294,12 @@ int main(int argc, char **argv) {
   // Run the Game
   if(isHost){
 
-    runGame(window, font, AllCards, sprites, socket, p1, p2);
+    runGame(window, font, AllCards, sprites, sword, shield, sword2, socket, p1, p2);
 
   } 
   else {
 
-    runGame(window, font, AllCards, sprites, socket, p2, p1);
+    runGame(window, font, AllCards, sprites, sword, shield, sword2, socket, p2, p1);
 
   }
 
